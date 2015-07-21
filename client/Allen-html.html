@@ -14,10 +14,15 @@
 		<link rel="stylesheet" href="css/avgrund.css">
 
     <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="/assets/js/foundation.js"></script>
     <script src="/assets/js/templates.js"></script>
     <script src="/assets/js/routes.js"></script>
     <script src="/assets/js/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 
     <script>
       function openDialog() {
@@ -29,6 +34,73 @@
       function closeDialog() {
         Avgrund.hide();
       }
+
+      $(document).ready( function(){
+        var noteID = 0;
+        var menuHeight = document.getElementById('menu').offsetHeight;
+
+        $("#addNote").click(function(){
+          $("#removeAll").data("cancel",true);
+          $("#addNote").hide();
+          $("#canvas").prepend("<h1 id='add-to-canvas'>Add your note to the blank space. </h1>");
+          $("#canvas").on("click",function(e){
+            var newTop = e.pageY-menuHeight;
+            var newLeft = e.pageX;
+            if (newTop+140 >= $(window).height()-menuHeight){
+              newTop = $(window).height()-menuHeight-200;
+            }
+            if (newLeft+140 >= $(window).width()){
+              newLeft = $(window).width()-200;
+            }
+            $("#canvas").append("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='editable' contentEditable='true' placeholder='Enter text here...'></div></div>");
+
+            $("#"+noteID)
+            .draggable({
+              containment: "#canvas",
+              scroll: false,
+              opacity: 0.7,
+              drag: function(event, ui){
+                ui.helper.children('.editable').blur()
+              }
+            })
+            .resizable({
+              containment: "#canvas",
+              minWidth: 200,
+              minHeight: 200
+            });
+            noteID++;
+            //
+            // $(".editable").on("click",function(e){
+            //   e.preventDefault();
+            //   alert($(this).parent().attr('id'));
+            //   $(".editable").off("click");
+            // });
+            $(".editable").dblclick(function(e){
+              e.stopPropagation()
+              $(this).focus();
+            });
+            $(".note").click(function(e){
+              $(this).children(".editable").blur()
+            });
+            $("#canvas").off("click");
+            $("#add-to-canvas").remove();
+            $("#addNote").show();
+            $("#removeAll").data("cancel",false);
+          });
+        });
+
+        $("#removeAll").click(function(){
+          if (!($("#removeAll").data("cancel"))) {
+            $(".note").remove();
+            noteID = 0;
+          }else{
+            $("#canvas").off("click");
+            $("#add-to-canvas").remove();
+            $("#addNote").show();
+            $("#removeAll").data("cancel",false);
+          }
+        });
+      });
 		</script>
 
   </head>
@@ -38,9 +110,9 @@
     		<aside id="default-popup" class="avgrund-popup">
     			<a onclick="javascript:closeDialog();" class="close-button">×</a>
     			<h2>Delete All?</h2>
-          <p>This requires some delete-all coding</p>
+          <p>I think I got the coding</p>
           <div class="modal-footer">
-            <button onclick="javascript:closeDialog();">Yes</button>
+            <button onclick="javascript:closeDialog();" id="removeAll">Yes</button>
             <button onclick="javascript:closeDialog();">No</button>
           </div>
     		</aside>
@@ -55,7 +127,7 @@
           </div>
         </aside>
 
-    	<div class="grid-frame vertical">
+    	<!-- <div class="grid-frame vertical">
         <div class="grid-content shrink collapse">
             <ul class="primary condense menu-bar" style="padding: 0;">
             <li class="show-for-large-only"><a href="#" zf-toggle="panel"><strong>Click Me!</strong></a></li>
@@ -70,7 +142,7 @@
         <div class="grid-block">
           <div zf-panel="" id="panel">
               <div id="tfheader">
-    		        <form id="tfnewsearch" method="get" action="">
+    		        <form id="tfnewsearch" method="get" action="http://www.capco.com/">
     		          <input type="text" class="tftextinput" name="q" size="21" maxlength="120">
                   <input type="submit" value="search">
     		        </form>
@@ -78,8 +150,28 @@
           	  </div>
           </div>
         </div>
-      </div>
+      </div> -->
 
+      <div class="grid-frame vertical">
+        <div class="grid-content shrink collapse" id="menu">
+          <div class="menu-group primary">
+            <div class="menu-group-left">
+              <ul class="primary menu-bar">
+                <!-- <li class="show-for-large-only"><a href="#" zf-toggle="panel"><strong>Toggle Panel</strong></a></li> There is no panel -->
+                <li><a id="addNote"><strong>+</strong></a><li>
+                <li><a href="#" onclick="javascript:openSecondDialog();"><strong>Share</strong></a></li>
+                </ul>
+              </div>
+              <div class="menu-group-right">
+                <ul class="primary menu-bar">
+                  <li><a href="#" onclick="javascript:openDialog();"><strong>x</strong></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="grid-block" id="canvas">
+          </div>
+        </div>
 
     		<div class="avgrund-cover"></div>
 
@@ -92,6 +184,26 @@
 
 
 <style>
+
+.note {
+  width: 200px;
+  height: 200px;
+  position: absolute;
+  background: orange;
+  /*border-radius: 100px;*/
+  text-align: justify;
+  padding: 10px;
+}
+
+.editable{
+  width: 100%;
+  height: 100%;
+  resize: none;
+  overflow: auto;
+  outline: none;
+}
+
+.editable::-webkit-scrollbar{width:0;}
 
 .panel {
   background: #0052CC

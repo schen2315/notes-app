@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en" ng-app="application">
+
+  <head>
+    <meta charset="utf-8" />
+    <title>Foundation for Apps with Avgrund</title>
+
+    <meta name="description" content="A modal concept which aims to give a sense of depth between the page and modal layers">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+		<link rel="stylesheet" href="css/avgrund.css">
+
+    <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
+    <script src="/assets/js/foundation.js"></script>
+    <script src="/assets/js/templates.js"></script>
+    <script src="/assets/js/routes.js"></script>
+    <script src="/assets/js/app.js"></script>
+
+    <script>
+      function openDialog() {
+        Avgrund.show( "#default-popup" );
+      }
+      function openSecondDialog() {
+        Avgrund.show( "#second-popup" );
+      }
+      function closeDialog() {
+        Avgrund.hide();
+      }
+		</script>
+
+  </head>
+
+  <body>
+
+    		<aside id="default-popup" class="avgrund-popup">
+    			<a onclick="javascript:closeDialog();" class="close-button">×</a>
+    			<h2>Delete All?</h2>
+          <p>This requires some delete-all coding</p>
+          <div class="modal-footer">
+            <button onclick="javascript:closeDialog();">Yes</button>
+            <button onclick="javascript:closeDialog();">No</button>
+          </div>
+    		</aside>
+
+        <aside id="second-popup" class="avgrund-popup">
+          <a onclick="javascript:closeDialog();" class="close-button">×</a>
+          <h2>Share All?</h2>
+          <p>This requires some share-all coding</p>
+          <div class="modal-footer">
+            <button onclick="javascript:closeDialog();">Yes</button>
+            <button onclick="javascript:closeDialog();">No</button>
+          </div>
+        </aside>
+
+    	<div class="grid-frame vertical">
+        <div class="grid-content shrink collapse">
+            <ul class="primary condense menu-bar" style="padding: 0;">
+            <li class="show-for-large-only"><a href="#" zf-toggle="panel"><strong>Click Me!</strong></a></li>
+            <li>
+        			<a href="#" onclick="javascript:openDialog();"><strong>Delete</strong></a>
+        		</li>
+            <li>
+              <a href="#" onclick="javascript:openSecondDialog();"><strong>Share</strong></a>
+            </li>
+          </ul>
+        </div>
+        <div class="grid-block">
+          <div zf-panel="" id="panel">
+              <div id="tfheader">
+    		        <form id="tfnewsearch" method="get" action="">
+    		          <input type="text" class="tftextinput" name="q" size="21" maxlength="120">
+                  <input type="submit" value="search">
+    		        </form>
+    	           <div class="tfclear"></div>
+          	  </div>
+          </div>
+        </div>
+      </div>
+
+
+    		<div class="avgrund-cover"></div>
+
+    		<script type="text/javascript" src="js/avgrund.js"></script>
+
+</body>
+
+</html>
+
+
+
+<style>
+
+.panel {
+  background: #0052CC
+}
+
+.avgrund-active body {
+	-webkit-transform: scale( 0.9 );
+	   -moz-transform: scale( 0.9 );
+	    -ms-transform: scale( 0.9 );
+	     -o-transform: scale( 0.9 );
+	        transform: scale( 0.9 );
+}
+
+.avgrund-cover {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	visibility: hidden;
+	opacity: 0;
+	background: rgba( 0, 0, 0, 0.5 );
+}
+	.avgrund-active .avgrund-cover {
+		visibility: visible;
+		opacity: 1;
+	}
+
+.avgrund-contents {
+	position: relative;
+	padding: 20px;
+	max-width: 400px;
+	height: 100%;
+	margin: auto;
+}
+	.avgrund-active .avgrund-contents {
+		-webkit-filter: blur(2px);
+		   -moz-filter: blur(2px);
+		    -ms-filter: blur(2px);
+		     -o-filter: blur(2px);
+		        filter: blur(2px);
+	}
+	.no-blur.avgrund-active .avgrund-contents {
+		-webkit-filter: none;
+		   -moz-filter: none;
+		    -ms-filter: none;
+		     -o-filter: none;
+		        filter: none;
+	}
+
+.avgrund-popup {
+	position: absolute;
+	width: 340px;
+	height: 180px;
+	left: 50%;
+	top: 50%;
+	margin: -130px 0 0 -190px;
+	visibility: hidden;
+	opacity: 0;
+	z-index: 2;
+	padding: 20px;
+
+	background: white;
+	box-shadow: 0px 0px 20px rgba( 0, 0, 0, 0.6 );
+	border-radius: 3px;
+
+	-webkit-transform: scale( 0.8 );
+	   -moz-transform: scale( 0.8 );
+	    -ms-transform: scale( 0.8 );
+	     -o-transform: scale( 0.8 );
+	        transform: scale( 0.8 );
+}
+	.avgrund-active .avgrund-popup-animate {
+		visibility: visible;
+		opacity: 1;
+
+		-webkit-transform: scale( 1.1 );
+		   -moz-transform: scale( 1.1 );
+		    -ms-transform: scale( 1.1 );
+		     -o-transform: scale( 1.1 );
+		        transform: scale( 1.1 );
+	}
+	.avgrund-popup.stack {
+		-webkit-transform: scale( 1.5 );
+		   -moz-transform: scale( 1.5 );
+		    -ms-transform: scale( 1.5 );
+		     -o-transform: scale( 1.5 );
+		        transform: scale( 1.5 );
+	}
+	.avgrund-active .avgrund-popup.stack {
+		-webkit-transform: scale( 1.1 );
+		   -moz-transform: scale( 1.1 );
+		    -ms-transform: scale( 1.1 );
+		     -o-transform: scale( 1.1 );
+		        transform: scale( 1.1 );
+	}
+
+
+.avgrund-ready body,
+.avgrund-ready .avgrund-contents,
+.avgrund-ready .avgrund-popup,
+.avgrund-ready .avgrund-cover {
+	-webkit-transform-origin: 50% 50%;
+	   -moz-transform-origin: 50% 50%;
+	    -ms-transform-origin: 50% 50%;
+	     -o-transform-origin: 50% 50%;
+	        transform-origin: 50% 50%;
+
+	-webkit-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	   -moz-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	    -ms-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	     -o-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	        transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+}
+.avgrund-ready .avgrund-popup.no-transition {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	    -ms-transition: none;
+	     -o-transition: none;
+	        transition: none;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+}
+
+html {
+	background-color: #222;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGklEQVQIW2NkYGD4D8SMQAwGcAY2AbBKDBUAVuYCBQPd34sAAAAASUVORK5CYII=);
+	background-repeat: repeat;
+}
+
+h1,
+h2 {
+	font-size: 24px;
+}
+
+p {
+	margin: 10px 0 10px 0;
+	font-size: 16px;
+	line-height: 1.32;
+}
+
+a {
+	color: #ffffff;
+	text-decoration: none;
+
+	-webkit-transition: 0.15s color ease;
+	   -moz-transition: 0.15s color ease;
+	    -ms-transition: 0.15s color ease;
+	     -o-transition: 0.15s color ease;
+	        transition: 0.15s color ease;
+}
+	a:hover {
+		color: #91cd85;
+	}
+
+small {
+	display: block;
+	margin-top: 15px;
+	padding-top: 15px;
+	color: #333;
+	font-size: 0.85em;
+	border-top: 1px dashed #ccc;
+
+	-webkit-text-size-adjust: none;
+}
+
+	cursor: pointer;
+	color: #fff;
+	background: #7aa76d;
+	font-size: 15px;
+
+	outline: none;
+
+	-webkit-transition: 0.15s background ease;
+	   -moz-transition: 0.15s background ease;
+	    -ms-transition: 0.15s background ease;
+	     -o-transition: 0.15s background ease;
+	        transition: 0.15s background ease;
+}
+
+body {
+	background: #fff;
+
+	font-family: 'Lato', Helvetica, sans-serif;
+	font-size: 16px;
+	color: #222;
+}
+
+</style>
+
+<script>
+
+var Avgrund = (function(){
+
+	var container = document.documentElement,
+		popup = document.querySelector( '.avgrund-popup-animate' ),
+		cover = document.querySelector( '.avgrund-cover' ),
+		currentState = null;
+
+	container.className = container.className.replace( /\s+$/gi, '' ) + ' avgrund-ready';
+
+	// Deactivate on ESC
+	function onDocumentKeyUp( event ) {
+		if( event.keyCode === 27 ) {
+			deactivate();
+		}
+	}
+
+	// Deactivate on click outside
+	function onDocumentClick( event ) {
+		if( event.target === cover ) {
+			deactivate();
+		}
+	}
+
+	function activate( state ) {
+		document.addEventListener( 'keyup', onDocumentKeyUp, false );
+		document.addEventListener( 'click', onDocumentClick, false );
+		document.addEventListener( 'touchstart', onDocumentClick, false );
+
+		removeClass( popup, currentState );
+		addClass( popup, 'no-transition' );
+		addClass( popup, state );
+
+		setTimeout( function() {
+			removeClass( popup, 'no-transition' );
+			addClass( container, 'avgrund-active' );
+		}, 0 );
+
+		currentState = state;
+	}
+
+	function deactivate() {
+		document.removeEventListener( 'keyup', onDocumentKeyUp, false );
+		document.removeEventListener( 'click', onDocumentClick, false );
+		document.removeEventListener( 'touchstart', onDocumentClick, false );
+
+		removeClass( container, 'avgrund-active' );
+		removeClass( popup, 'avgrund-popup-animate')
+	}
+
+	function disableBlur() {
+		addClass( document.documentElement, 'no-blur' );
+	}
+
+	function addClass( element, name ) {
+		element.className = element.className.replace( /\s+$/gi, '' ) + ' ' + name;
+	}
+
+	function removeClass( element, name ) {
+		element.className = element.className.replace( name, '' );
+	}
+
+	function show(selector){
+		popup = document.querySelector( selector );
+		addClass(popup, 'avgrund-popup-animate');
+		activate();
+		return this;
+	}
+	function hide() {
+		deactivate();
+	}
+
+	return {
+		activate: activate,
+		deactivate: deactivate,
+		disableBlur: disableBlur,
+		show: show,
+		hide: hide
+	}
+
+})();
+
+</script>

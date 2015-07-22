@@ -16,7 +16,7 @@
 
   <script>
   // problems right now:
-  // fix the editable div
+  // fix the entire code
 
   $(document).ready( function(){
     var noteID = 0;
@@ -35,27 +35,10 @@
         if (newLeft+140 >= $(window).width()){
           newLeft = $(window).width()-200;
         }
-        $("#add-to-canvas").after("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'></div>");
+        $("#add-to-canvas").after("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
         $("#"+noteID).draggable({
           containment: "#canvas",
-          scroll: false,
           opacity: 0.7
-        });
-        // .resizable({
-        //   containment: "#canvas",
-        //   minWidth: 200,
-        //   minHeight: 200
-        // });
-        $("#"+noteID).click(function(){
-            if ( $(this).is('.ui-draggable-dragging') ) {
-                return;
-            }
-            $(this).draggable( "option", "disabled", true );
-            $(this).attr('contenteditable','true');
-        })
-        .blur(function(){
-            $(this).draggable( 'option', 'disabled', false);
-            $(this).attr('contenteditable','false');
         });
         noteID++;
         $("#canvas").off("click");
@@ -81,24 +64,47 @@
   </script>
 
   <style>
+
   .note {
-    width: 200px;
-    height: 200px;
+    width:250px;
+    height:250px;
+    background:#FFFF99;
     position: absolute;
-    background-color: orange;
-    /*border-radius: 100px;*/
-    text-align: justify;
-    overflow: auto;
-    /*outline: none;*/
-    padding: 10px;
-    white-space: pre-wrap; /*CSS3*/
-    white-space: -moz-pre-wrap; /* Firefox */
-    white-space: -pre-wrap;     /* Opera <7 */
-    white-space: -o-pre-wrap;   /* Opera 7 */
-    word-wrap: break-word;      /* IE */
+    overflow:hidden;
+    /*box-shadow:4px 4px 8px #1c1c1c;
+    -webkit-box-shadow:4px 4px 8px #1c1c1c;
+    -moz-box-shadow:4px 4px 8px #1c1c1c;
+    -o-box-shadow:4px 4px 8px #1c1c1c;*/
   }
 
-  .note::-webkit-scrollbar{width:0;}
+  /*.note:active{
+  	box-shadow:8px 8px 16px #1c1c1c;
+  	-webkit-box-shadow:8px 8px 16px #1c1c1c;
+  	-moz-box-shadow:8px 8px 16px #1c1c1c;
+  	-o-box-shadow:8px 8px 16px #1c1c1c;
+  }*/
+
+  .noteTitle {
+    text-align:center;
+	  font-weight:bold;
+    font-family:arial;
+    padding:10px 0px 10px 0px;
+    /*box-shadow:0px 4px 4px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.3);
+    -o-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.3);*/
+  }
+
+  .noteTextArea{
+    width:100%;
+    height:84%;
+    border:0px;
+    resize:none;
+    background:transparent;
+    padding:10px;
+  }
+
+  .noteTextArea::-webkit-scrollbar{width:0;}
 
   </style>
 

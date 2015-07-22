@@ -5,10 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Foundation for Apps</title>
     <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
-    <script src="/assets/js/foundation.js"></script>
-    <script src="/assets/js/templates.js"></script>
-    <script src="/assets/js/routes.js"></script>
-    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/foundation.js" type="text/javascript"></script>
+    <script src="/assets/js/templates.js" type="text/javascript"></script>
+    <script src="/assets/js/routes.js" type="text/javascript"></script>
+    <script src="/assets/js/app.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script>
+    !function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,d=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(this._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),this._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd  ")}),d.call(b)}}}(jQuery);
+    </script>
   </head>
   <body>
     <div class="grid-frame vertical">
@@ -19,6 +25,40 @@
       </div>
       <div ui-view class="grid-content">
       </div>
+      <style media="screen">
+          body { font-family: sans-serif; }
+
+          .ui-widget-content {
+          width: 140px;
+          height: 140px;
+          background: pink;
+          border-radius: 10px;
+          margin: 0 10px 10px 0;
+          border: 2px solid white;
+          }
+          #containment {
+            border: 2px solid pink;
+            width: 750px;
+            height: 500px;
+          }
+
+      </style>
+    </head>
+    <body>
+      <div id="containment">
+        <div id="1" class="ui-widget-content">
+            <p>Drag me around</p>
+        </div>
+        <div id="2" class="ui-widget-content">
+            <p>Drag me around</p>
+        </div>
+        <div id="3" class="ui-widget-content">
+            <p>Drag me around</p>
+        </div>
+      </div>
     </div>
+    
+    <script src="/assets/js/socket.io.js"></script>
+    <script src="/assets/js/io.js"></script>
   </body>
 </html>

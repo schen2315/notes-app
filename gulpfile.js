@@ -45,7 +45,12 @@ var paths = {
   // These files are for your app's JavaScript
   appJS: [
     'client/assets/js/app.js'
-  ]
+  ],
+  //These are the socket.io clientside file 
+  socketIoJS : 'client/assets/js/socket.io.js',
+  
+  //Where all the magic happens
+  ioJS : 'client/assets/js/io.js'
 }
 
 // 3. TASKS
@@ -113,7 +118,7 @@ gulp.task('sass', function () {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
+gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io']);
 
 gulp.task('uglify:foundation', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
@@ -141,8 +146,36 @@ gulp.task('uglify:app', function() {
   ;
 });
 
+gulp.task('uglify:socket', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function(e) {
+      console.log(e);
+    }));
+    
+  return gulp.src(paths.socketIoJS)
+    .pipe(uglify)
+    .pipe($.concat('socket.io.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:io', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function(e) {
+      console.log(e);
+    }));
+    
+  return gulp.src(paths.ioJS)
+    .pipe(uglify)
+    .pipe($.concat('io.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
 // Starts a test server, which you can view at http://localhost:8080
+//take this out and swap for an express server.
 gulp.task('server', ['build'], function() {
+    /*
   gulp.src('./build')
     .pipe($.webserver({
       port: 8080,
@@ -150,8 +183,39 @@ gulp.task('server', ['build'], function() {
       fallback: 'index.html',
       livereload: true,
       open: true
-    }))
-  ;
+    }));
+    */
+
+    var express = require('express');
+    var sockets = require('socket.io');
+    var path = require('path');
+    var http = require('http');
+
+    var app = express();
+    app.use(express.static(path.join(__dirname, '/build/')));
+    app.set('port', 3000);
+
+    var server = http.createServer(app);
+
+    server.listen(3000);
+    
+    var io = sockets(server);
+    
+    console.log('hey')
+    io.on('connection', function(socket) {
+
+      //CUSTOMIZABILITY FEATURE ADDON
+      //give a unique user id to each user and
+      //console it
+      console.log('a user connected');
+      //socket.on('disconnect', console.log('a user disconnected'));
+      socket.on('move', function(data) {
+        socket.broadcast.emit('move', data);
+      })
+    });
+
+    
+
 });
 
 // Builds your entire app once, without starting a server

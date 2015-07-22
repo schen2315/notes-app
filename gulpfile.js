@@ -193,11 +193,11 @@ gulp.task('server', ['build'], function() {
 
     var app = express();
     app.use(express.static(path.join(__dirname, '/build/')));
-    app.set('port', 3000);
+    app.set('port', 8080);
 
     var server = http.createServer(app);
 
-    server.listen(3000);
+    server.listen(8080);
     
     var io = sockets(server);
     

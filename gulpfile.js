@@ -50,7 +50,13 @@ var paths = {
   socketIoJS : 'client/assets/js/socket.io.js',
   
   //Where all the magic happens
-  ioJS : 'client/assets/js/io.js'
+  ioJS : 'client/assets/js/io.js',
+  
+  //personal styling options 
+  notesStyle : 'client/assets/css/notesStyle.css',
+  
+  //controlling the frontend notes behavior
+  notesJS : 'client/assets/js/notesJS.js'
 }
 
 // 3. TASKS
@@ -117,8 +123,15 @@ gulp.task('sass', function () {
   ;
 });
 
+//get css to build folder
+gulp.task('css', function() {
+  return gulp.src('client/assets/css/notes-style.css')
+      .pipe(gulp.dest('./build/assets/css/'))
+  ;
+});
+
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io']);
+gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io', 'uglify:notes']);
 
 gulp.task('uglify:foundation', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
@@ -172,6 +185,19 @@ gulp.task('uglify:io', function() {
   ;
 });
 
+gulp.task('uglify:notes', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function(e) {
+      console.log(e);
+    }));
+    
+  return gulp.src(paths.notesJS)
+    .pipe(uglify)
+    .pipe($.concat('notesJS.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+})
+
 // Starts a test server, which you can view at http://localhost:8080
 //take this out and swap for an express server.
 gulp.task('server', ['build'], function() {
@@ -220,7 +246,7 @@ gulp.task('server', ['build'], function() {
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function(cb) {
-  sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', cb);
+  sequence('clean', ['copy', 'copy:foundation', 'sass', 'css', 'uglify'], 'copy:templates', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change

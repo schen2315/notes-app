@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Foundation for Apps</title>
   <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
   <script src="/assets/js/foundation.js"></script>
   <script src="/assets/js/templates.js"></script>
   <script src="/assets/js/routes.js"></script>
   <script src="/assets/js/app.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
   <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 
@@ -36,36 +35,29 @@
         if (newLeft+140 >= $(window).width()){
           newLeft = $(window).width()-200;
         }
-        $("#canvas").append("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='editable' contentEditable='true' placeholder='Enter text here...'></div></div>");
-
-        $("#"+noteID)
-        .draggable({
+        $("#add-to-canvas").after("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'></div>");
+        $("#"+noteID).draggable({
           containment: "#canvas",
           scroll: false,
-          opacity: 0.7,
-          drag: function(event, ui){
-            ui.helper.children('.editable').blur()
-          }
+          opacity: 0.7
+        });
+        // .resizable({
+        //   containment: "#canvas",
+        //   minWidth: 200,
+        //   minHeight: 200
+        // });
+        $("#"+noteID).click(function(){
+            if ( $(this).is('.ui-draggable-dragging') ) {
+                return;
+            }
+            $(this).draggable( "option", "disabled", true );
+            $(this).attr('contenteditable','true');
         })
-        .resizable({
-          containment: "#canvas",
-          minWidth: 200,
-          minHeight: 200
+        .blur(function(){
+            $(this).draggable( 'option', 'disabled', false);
+            $(this).attr('contenteditable','false');
         });
         noteID++;
-        // 
-        // $(".editable").on("click",function(e){
-        //   e.preventDefault();
-        //   alert($(this).parent().attr('id'));
-        //   $(".editable").off("click");
-        // });
-        $(".editable").dblclick(function(e){
-          e.stopPropagation()
-          $(this).focus();
-        });
-        $(".note").click(function(e){
-          $(this).children(".editable").blur()
-        });
         $("#canvas").off("click");
         $("#add-to-canvas").remove();
         $("#addNote").show();
@@ -93,21 +85,20 @@
     width: 200px;
     height: 200px;
     position: absolute;
-    background: orange;
+    background-color: orange;
     /*border-radius: 100px;*/
     text-align: justify;
-    padding: 10px;
-  }
-
-  .editable{
-    width: 100%;
-    height: 100%;
-    resize: none;
     overflow: auto;
-    outline: none;
+    /*outline: none;*/
+    padding: 10px;
+    white-space: pre-wrap; /*CSS3*/
+    white-space: -moz-pre-wrap; /* Firefox */
+    white-space: -pre-wrap;     /* Opera <7 */
+    white-space: -o-pre-wrap;   /* Opera 7 */
+    word-wrap: break-word;      /* IE */
   }
 
-  .editable::-webkit-scrollbar{width:0;}
+  .note::-webkit-scrollbar{width:0;}
 
   </style>
 
@@ -119,18 +110,18 @@
         <div class="menu-group-left">
           <ul class="primary menu-bar">
             <li><a><strong>Foundation for Apps</strong></a></li>
-            <li><a id="addNote"><strong>+</strong></a><li>
-            </ul>
-          </div>
-          <div class="menu-group-right">
-            <ul class="primary menu-bar">
-              <li><a id="removeAll"><strong>x</strong></a></li>
-            </ul>
-          </div>
+            <li><a id="addNote"><strong>+</strong></a></li>
+          </ul>
+        </div>
+        <div class="menu-group-right">
+          <ul class="primary menu-bar">
+            <li><a id="removeAll"><strong>x</strong></a></li>
+          </ul>
         </div>
       </div>
-      <div class="grid-block" id="canvas">
-      </div>
     </div>
-  </body>
-  </html>
+    <div class="grid-block" id="canvas">
+    </div>
+  </div>
+</body>
+</html>

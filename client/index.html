@@ -1,71 +1,439 @@
 <!doctype html>
 <html lang="en" ng-app="application">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Foundation for Apps</title>
-  <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-  <script src="/assets/js/foundation.js"></script>
-  <script src="/assets/js/templates.js"></script>
-  <script src="/assets/js/routes.js"></script>
-  <script src="/assets/js/app.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
 
-  <script>
-  // problems right now:
-  // fix the entire code
+  <head>
+    <meta charset="utf-8" />
+    <title>Foundation for Apps with Avgrund</title>
 
-  $(document).ready( function(){
-    var noteID = 0;
-    var menuHeight = document.getElementById('menu').offsetHeight;
+    <meta name="description" content="A modal concept which aims to give a sense of depth between the page and modal layers">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+		<link rel="stylesheet" href="css/avgrund.css">
 
-    $("#addNote").click(function(){
-      $("#removeAll").data("cancel",true);
-      $("#addNote").hide();
-      $("#canvas").prepend("<h1 id='add-to-canvas'>Add your note to the blank space. </h1>");
-      $("#canvas").on("click",function(e){
-        var newTop = e.pageY-menuHeight;
-        var newLeft = e.pageX;
-        if (newTop+140 >= $(window).height()-menuHeight){
-          newTop = $(window).height()-menuHeight-200;
-        }
-        if (newLeft+140 >= $(window).width()){
-          newLeft = $(window).width()-200;
-        }
-        $("#add-to-canvas").after("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
-        $("#"+noteID).draggable({
-          containment: "#canvas",
-          opacity: 0.7
+    <link href="/assets/css/app.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="/assets/js/foundation.js"></script>
+    <script src="/assets/js/templates.js"></script>
+    <script src="/assets/js/routes.js"></script>
+    <script src="/assets/js/app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+    <!-- // <script src="http://www.appelsiini.net/download/jquery.jeditable.mini.js"></script> -->
+
+    <script>
+      function openDialog() {
+        Avgrund.show( "#default-popup" );
+      }
+      function openSecondDialog() {
+        Avgrund.show( "#second-popup" );
+      }
+      function closeDialog() {
+        Avgrund.hide();
+      }
+
+      $(document).ready( function(){
+      var noteID = 0;
+      var menuHeight = document.getElementById('menu').offsetHeight;
+      // add note to the screen
+      $("#addNote").click(function(){
+        $("#removeAll").data("cancel",true);
+        $("#addNote").hide();
+        $("#canvas").prepend("<h1 id='add-to-canvas'>Add your note to the blank space. </h1>");
+        $("#canvas").on("click",function(e){
+          // initializing note position
+          var newTop = e.pageY-menuHeight;
+          var newLeft = e.pageX;
+          if (newTop+250 >= $(window).height()-menuHeight){
+            newTop = $(window).height()-menuHeight-250;
+          }
+          if (newLeft+250 >= $(window).width()){
+            newLeft = $(window).width()-250;
+          }
+          $("#add-to-canvas")
+          .after("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
+          // setting note to draggable
+          $("#"+noteID).draggable({
+            containment: "#canvas",
+            opacity: 0.7
+          });
+
+          $("input, textarea").each(function() {
+            $(this).click(function() {
+              $(this).focus();
+            });
+          });
+          // .resizable({
+          //   containment: "#canvas",
+          //   minWidth: 250,
+          //   minHeight: 250,
+          //   handles: 'all'
+          // });
+          noteID++;
+          // return screen to normal
+          $("#canvas").off("click");
+          $("#add-to-canvas").remove();
+          $("#addNote").show();
+          $("#removeAll").data("cancel",false);
         });
-        noteID++;
-        $("#canvas").off("click");
-        $("#add-to-canvas").remove();
-        $("#addNote").show();
-        $("#removeAll").data("cancel",false);
+      });
+
+      // remove all notes or cancel the add note process
+      $("#removeAll").click(function(){
+        // remove all notes
+        if (!($("#removeAll").data("cancel"))) {
+          $(".note").remove();
+          noteID = 0;
+        }else{
+          // cancel the note initialization
+          $("#canvas").off("click");
+          $("#add-to-canvas").remove();
+          $("#addNote").show();
+          $("#removeAll").data("cancel",false);
+        }
       });
     });
+		</script>
 
-    $("#removeAll").click(function(){
-      if (!($("#removeAll").data("cancel"))) {
-        $(".note").remove();
-        noteID = 0;
-      }else{
-        $("#canvas").off("click");
-        $("#add-to-canvas").remove();
-        $("#addNote").show();
-        $("#removeAll").data("cancel",false);
-      }
-    });
-  });
+  </head>
+  <body>
+<!--Avgrund craziness-->
+    		<aside id="default-popup" class="avgrund-popup">
+    			<a onclick="javascript:closeDialog();" class="close-button">×</a>
+    			<h2>Share All?</h2>
+          <p>Share All</p>
+            <button onclick="javascript:closeDialog();">Yes</button>
+            <button onclick="javascript:closeDialog();">No</button>
+    		</aside>
 
-  </script>
+        <aside id="second-popup" class="avgrund-popup">
+          <a onclick="javascript:closeDialog();" class="close-button">×</a>
+          <h2>Delete All?</h2>
+          <p>Delete All</p>
+            <button onclick="javascript:closeDialog();" id="removeAll">Yes</button>
+            <button onclick="javascript:closeDialog();">No</button>
+        </aside>
+<!------------------------------------------------------------>
+    	<div class="grid-frame vertical">
+        <div class="grid-content shrink collapse" id="menu">
+          <div class="menu-group primary">
+            <div class="menu-group-left">
+              <ul class="primary menu-bar">
+                <li class="show-for-large-only"><a href="#" zf-toggle="panel"><strong>Toggle Panel</strong></a></li>
+                <li><a id="addNote"><strong>+</strong></a></li>
+                <li>
+                  <a href="#" onclick="javascript:openDialog();" zf-close="panel" class="fast"><strong>Share</strong></a>
+                </li>
+              </ul>
+            </div>
+            <div class="menu-group-right">
+              <ul class="primary menu-bar">
+                <li>
+                  <a href="#" onclick="javascript:openSecondDialog();" zf-close="panel" class="fast"><strong>×</strong></a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="grid-block vertical">
+          <div class="grid-block" id="canvas">
+            <div zf-panel="" id="panel">
+              <div class="grid-content">
+                <h3 style="margin:8px;">Project List</h3>
+              </div>
+              <div class="grid-content">
+                  <a class="button" onclick="appendText()" style="margin: 8px">
+                    New Project
+                  </a>
+              </div>
+              <hr>
+              <div class="grid-content" id="test"></div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!------------------------------------------------------------>
+    		<div class="avgrund-cover"></div>
 
-  <style>
+    		<script type="text/javascript" src="js/avgrund.js"></script>
 
-  .note {
+</body>
+</html>
+
+
+<script>
+
+function appendText() {
+  var Project = ("<a class='button' style='margin: 8px;'>Project</a><hr>")
+  $("#test").append(Project);
+}
+
+var Avgrund = (function(){
+
+	var container = document.documentElement,
+		popup = document.querySelector( '.avgrund-popup-animate' ),
+		cover = document.querySelector( '.avgrund-cover' ),
+		currentState = null;
+
+	container.className = container.className.replace( /\s+$/gi, '' ) + ' avgrund-ready';
+
+	// Deactivate on ESC
+	function onDocumentKeyUp( event ) {
+		if( event.keyCode === 27 ) {
+			deactivate();
+		}
+	}
+
+	// Deactivate on click outside
+	function onDocumentClick( event ) {
+		if( event.target === cover ) {
+			deactivate();
+		}
+	}
+
+	function activate( state ) {
+		document.addEventListener( 'keyup', onDocumentKeyUp, false );
+		document.addEventListener( 'click', onDocumentClick, false );
+		document.addEventListener( 'touchstart', onDocumentClick, false );
+
+		removeClass( popup, currentState );
+		addClass( popup, 'no-transition' );
+		addClass( popup, state );
+
+		setTimeout( function() {
+			removeClass( popup, 'no-transition' );
+			addClass( container, 'avgrund-active' );
+		}, 0 );
+
+		currentState = state;
+	}
+
+	function deactivate() {
+		document.removeEventListener( 'keyup', onDocumentKeyUp, false );
+		document.removeEventListener( 'click', onDocumentClick, false );
+		document.removeEventListener( 'touchstart', onDocumentClick, false );
+
+		removeClass( container, 'avgrund-active' );
+		removeClass( popup, 'avgrund-popup-animate')
+	}
+
+	function disableBlur() {
+		addClass( document.documentElement, 'no-blur' );
+	}
+
+	function addClass( element, name ) {
+		element.className = element.className.replace( /\s+$/gi, '' ) + ' ' + name;
+	}
+
+	function removeClass( element, name ) {
+		element.className = element.className.replace( name, '' );
+	}
+
+	function show(selector){
+		popup = document.querySelector( selector );
+		addClass(popup, 'avgrund-popup-animate');
+		activate();
+		return this;
+	}
+	function hide() {
+		deactivate();
+	}
+
+	return {
+		activate: activate,
+		deactivate: deactivate,
+		disableBlur: disableBlur,
+		show: show,
+		hide: hide
+	}
+
+})();
+
+</script>
+
+<style>
+
+.avgrund-active body {
+	-webkit-transform: scale( 0.96 );
+	   -moz-transform: scale( 0.96 );
+	    -ms-transform: scale( 0.96 );
+	     -o-transform: scale( 0.96 );
+	        transform: scale( 0.96 );
+}
+
+.avgrund-cover {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 1;
+	visibility: hidden;
+	opacity: 0;
+	background: rgba( 0, 0, 0, 0.5 );
+}
+
+	.avgrund-active .avgrund-cover {
+		visibility: visible;
+		opacity: 1;
+	}
+
+.avgrund-contents {
+	position: relative;
+	padding: 20px;
+	max-width: 400px;
+	height: 100%;
+	margin: auto;
+}
+	.avgrund-active .avgrund-contents {
+		-webkit-filter: blur(2px);
+		   -moz-filter: blur(2px);
+		    -ms-filter: blur(2px);
+		     -o-filter: blur(2px);
+		        filter: blur(2px);
+	}
+	.no-blur.avgrund-active .avgrund-contents {
+		-webkit-filter: none;
+		   -moz-filter: none;
+		    -ms-filter: none;
+		     -o-filter: none;
+		        filter: none;
+	}
+
+.avgrund-popup {
+	position: absolute;
+	width: 340px;
+	height: 180px;
+	left: 50%;
+	top: 50%;
+	margin: -130px 0 0 -190px;
+	visibility: hidden;
+	opacity: 0;
+	z-index: 2;
+	padding: 20px;
+
+	background: white;
+	box-shadow: 0px 0px 20px rgba( 0, 0, 0, 0.6 );
+	border-radius: 3px;
+
+	-webkit-transform: scale( 0.8 );
+	   -moz-transform: scale( 0.8 );
+	    -ms-transform: scale( 0.8 );
+	     -o-transform: scale( 0.8 );
+	        transform: scale( 0.8 );
+}
+	.avgrund-active .avgrund-popup-animate {
+		visibility: visible;
+		opacity: 1;
+
+		-webkit-transform: scale( 1.1 );
+		   -moz-transform: scale( 1.1 );
+		    -ms-transform: scale( 1.1 );
+		     -o-transform: scale( 1.1 );
+		        transform: scale( 1.1 );
+	}
+	.avgrund-popup.stack {
+		-webkit-transform: scale( 1.5 );
+		   -moz-transform: scale( 1.5 );
+		    -ms-transform: scale( 1.5 );
+		     -o-transform: scale( 1.5 );
+		        transform: scale( 1.5 );
+	}
+	.avgrund-active .avgrund-popup.stack {
+		-webkit-transform: scale( 1.1 );
+		   -moz-transform: scale( 1.1 );
+		    -ms-transform: scale( 1.1 );
+		     -o-transform: scale( 1.1 );
+		        transform: scale( 1.1 );
+	}
+
+
+.avgrund-ready body,
+.avgrund-ready .avgrund-contents,
+.avgrund-ready .avgrund-popup,
+.avgrund-ready .avgrund-cover {
+	-webkit-transform-origin: 50% 50%;
+	   -moz-transform-origin: 50% 50%;
+	    -ms-transform-origin: 50% 50%;
+	     -o-transform-origin: 50% 50%;
+	        transform-origin: 50% 50%;
+
+	-webkit-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	   -moz-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	    -ms-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	     -o-transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+	        transition: 0.3s all cubic-bezier(0.250, 0.460, 0.450, 0.940);
+}
+.avgrund-ready .avgrund-popup.no-transition {
+	-webkit-transition: none;
+	   -moz-transition: none;
+	    -ms-transition: none;
+	     -o-transition: none;
+	        transition: none;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+html,
+body {
+	height: 100%;
+	overflow: hidden;
+}
+
+html {
+	background-color: #222;
+	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGklEQVQIW2NkYGD4D8SMQAwGcAY2AbBKDBUAVuYCBQPd34sAAAAASUVORK5CYII=);
+	background-repeat: repeat;
+}
+
+h1,
+h2 {
+	font-size: 24px;
+}
+
+p {
+	margin: 10px 0 10px 0;
+	font-size: 16px;
+	line-height: 1.32;
+}
+
+small {
+	display: block;
+	margin-top: 15px;
+	padding-top: 15px;
+	color: #333;
+	font-size: 0.85em;
+	border-top: 1px dashed #ccc;
+
+	-webkit-text-size-adjust: none;
+}
+
+	cursor: pointer;
+	color: #fff;
+	background: #7aa76d;
+	font-size: 15px;
+
+	outline: none;
+
+	-webkit-transition: 0.15s background ease;
+	   -moz-transition: 0.15s background ease;
+	    -ms-transition: 0.15s background ease;
+	     -o-transition: 0.15s background ease;
+	        transition: 0.15s background ease;
+}
+
+body {
+	background: #fff;
+
+	font-family: 'Lato', Helvetica, sans-serif;
+	font-size: 16px;
+	color: #222;
+}
+
+.note {
     width:250px;
     height:250px;
     background:#FFFF99;
@@ -76,14 +444,12 @@
     -moz-box-shadow:4px 4px 8px #1c1c1c;
     -o-box-shadow:4px 4px 8px #1c1c1c;*/
   }
-
   /*.note:active{
   	box-shadow:8px 8px 16px #1c1c1c;
   	-webkit-box-shadow:8px 8px 16px #1c1c1c;
   	-moz-box-shadow:8px 8px 16px #1c1c1c;
   	-o-box-shadow:8px 8px 16px #1c1c1c;
   }*/
-
   .noteTitle {
     text-align:center;
 	  font-weight:bold;
@@ -94,7 +460,6 @@
     -moz-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.3);
     -o-box-shadow:0px 4px 4px rgba(0, 0, 0, 0.3);*/
   }
-
   .noteTextArea{
     width:100%;
     height:84%;
@@ -103,31 +468,7 @@
     background:transparent;
     padding:10px;
   }
-
   .noteTextArea::-webkit-scrollbar{width:0;}
 
-  </style>
 
-</head>
-<body>
-  <div class="grid-frame vertical">
-    <div class="grid-content shrink collapse" id="menu">
-      <div class="menu-group primary">
-        <div class="menu-group-left">
-          <ul class="primary menu-bar">
-            <li><a><strong>Foundation for Apps</strong></a></li>
-            <li><a id="addNote"><strong>+</strong></a></li>
-          </ul>
-        </div>
-        <div class="menu-group-right">
-          <ul class="primary menu-bar">
-            <li><a id="removeAll"><strong>x</strong></a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="grid-block" id="canvas">
-    </div>
-  </div>
-</body>
-</html>
+</style>

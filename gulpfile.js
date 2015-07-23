@@ -235,9 +235,16 @@ gulp.task('server', ['build'], function() {
       //console it
       console.log('a user connected');
       //socket.on('disconnect', console.log('a user disconnected'));
-      socket.on('move', function(data) {
-        socket.broadcast.emit('move', data);
-      })
+      socket.on('drag', function(data) {
+        console.log('moving');
+        socket.broadcast.emit('drag', data);
+      });
+      
+      socket.on('addNote', function(data) {
+        console.log('adding');
+        socket.broadcast.emit('addNote', data);
+      });
+      
     });
 
     

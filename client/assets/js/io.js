@@ -97,7 +97,10 @@
                             })  //these are the event listeners that make the socket.io work
                  .on('drag', drag)
                  .on('click', staticClick);
-                 //.css('transform', 'translate(' + newLeft + 'px ,' + newTop + 'px)');
+                 .css({
+                        'top': newTop,
+                        'left': newLeft
+                      });
               
                  
     noteID++

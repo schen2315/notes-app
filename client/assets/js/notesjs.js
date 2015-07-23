@@ -51,6 +51,8 @@ $(document).ready( function(){
   
   
   function initializeNote(e) {
+    
+    //what does this mean?????
     var newTop = e.pageY-menuHeight;
     var newLeft = e.pageX;
     if (newTop+140 >= $(window).height()-menuHeight){
@@ -59,16 +61,21 @@ $(document).ready( function(){
     if (newLeft+140 >= $(window).width()){
       newLeft = $(window).width()-200;
     }
-    $("#canvas").append("<div class='note' style='transform:translate(" + newLeft + "px ," + newTop + "px)' id='" + noteID + "'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
     
+    $("#canvas").append("<div class='note' id='" + noteID + "'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
+                
     
     $("#" + noteID).draggable({
                               containment: "#canvas",
                               opacity: 0.7
                             })  //these are the event listeners that make the socket.io work
+                 .css({
+                        'top': newTop,
+                        'left': newLeft
+                      })
                  .on('drag', drag)
                  .on('click', staticClick);
-              
+                 
   
     $("#canvas").off("click");
     $("#add-to-canvas").remove();

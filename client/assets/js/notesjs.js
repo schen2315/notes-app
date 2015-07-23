@@ -1,3 +1,18 @@
+function openDialog() {
+  Avgrund.show( "#default-popup" );
+}
+function openSecondDialog() {
+  Avgrund.show( "#second-popup" );
+}
+function closeDialog() {
+  Avgrund.hide();
+}
+function appendText() {
+  var Project = ("<a class='button' style='margin: 8px;'>Project</a><hr>")
+  $("#test").append(Project);
+}
+
+
 // problems right now:
 // fix the entire code
 

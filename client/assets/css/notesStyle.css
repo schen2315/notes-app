@@ -3,6 +3,7 @@
   height:250px;
   background:#FFFF99;
   overflow:hidden;
+  position: absolute;
   /*box-shadow:4px 4px 8px #1c1c1c;
   -webkit-box-shadow:4px 4px 8px #1c1c1c;
   -moz-box-shadow:4px 4px 8px #1c1c1c;

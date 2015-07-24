@@ -47,7 +47,10 @@
     //later create the ability to append an array of notes
     //so that we can refer to that note
 
-    $('#' + data.id.toString()).css('position', 'relative').css('transform', 'translate(' + positionX + 'px ,' + positionY + 'px)');
+    $('#' + data.id.toString()).css({
+                                       'top': positionY,
+                                       'left': positionX
+                                     });
     
   }
   
@@ -96,12 +99,10 @@
                               opacity: 0.7
                             })  //these are the event listeners that make the socket.io work
                  .on('drag', drag)
-                 .on('click', staticClick);
                  .css({
                         'top': newTop,
                         'left': newLeft
                       });
-              
-                 
+    
     noteID++
   }

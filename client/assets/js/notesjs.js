@@ -23,8 +23,9 @@ $(document).ready( function(){
   $("#addNote").click(function(){
     $("#removeAll").data("cancel",true);
     $("#addNote").hide();
-    $("#canvas").prepend("<h2 id='add-to-canvas' style='position:absolute;z-index:3'>Add your note to the blank space. </h2>");
-    
+
+    $("#canvas").prepend("<h2 id='add-to-canvas'>Add your note to the blank space. </h2>");
+
     //here we will emit the add event
     $("#canvas").on("click", initializeNote);
   });
@@ -36,47 +37,46 @@ $(document).ready( function(){
     }else{
       $("#canvas").off("click");
       $("#add-to-canvas").remove();
-      
+
       //here we emit the remove event
       $("#addNote").show();
       $("#removeAll").data("cancel",false);
     }
   });
-  
+
+  // making textareas in notes able to be focused on mobile devices
+  // this code is a placeholder for now
+  $("input, textarea").each(function() {
+    $(this).click(function() {
+      $(this).focus();
+    });
+  });
+
   //dude organize this mess
   //make seperate functions
-  
-  
-  
-  
-  
+
+
+
+
+
   function initializeNote(e) {
     
     //what does this mean?????
     var newTop = e.pageY-menuHeight;
     var newLeft = e.pageX;
-    if (newTop+140 >= $(window).height()-menuHeight){
-      newTop = $(window).height()-menuHeight-200;
-    }
-    if (newLeft+140 >= $(window).width()){
-      newLeft = $(window).width()-200;
-    }
-    
-    $("#canvas").append("<div class='note' id='" + noteID + "'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
-                
-    
+  
+
+    $("#canvas").append("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
+
+
+
     $("#" + noteID).draggable({
                               containment: "#canvas",
                               opacity: 0.7
                             })  //these are the event listeners that make the socket.io work
-                 .css({
-                        'top': newTop,
-                        'left': newLeft
-                      })
                  .on('drag', drag)
                  .on('click', staticClick);
-                 
-  
+
     $("#canvas").off("click");
     $("#add-to-canvas").remove();
     $("#addNote").show();

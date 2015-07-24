@@ -40,12 +40,6 @@ npm install
 bower install
 ```
 
-While you're working on your project, run:
-
-```bash
-npm start
-```
-
 This will compile the Sass and assemble your Angular app. **Now go to `localhost:8080` in your browser to see it in action.** When you change any file in the `client` folder, the appropriate Gulp task will run to build new files.
 
 To run the compiling process once, without watching any files, use the `build` command.

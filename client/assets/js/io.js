@@ -27,15 +27,18 @@
     });
     
     socket.emit('drag', {
-      id : note.attr('id'), position : ui.position
+      id : note.attr('id'), position : {
+                                          left : (ui.position.left/ canvasWidth),
+                                          top : (ui.position.top / canvasHeight)
+                                        }
     });
   }
   
   function dragResponse(data) {
     
     var id = data.id,
-        positionX = data.position.left,
-        positionY = data.position.top;
+        percentLeft = data.position.left,
+        percentTop = data.position.top;
 
 
     //BUG FIX
@@ -48,8 +51,8 @@
     //so that we can refer to that note
 
     $('#' + data.id.toString()).css({
-                                       'top': positionY,
-                                       'left': positionX
+                                       'top': (percentTop * canvasHeight),
+                                       'left': (percentLeft * canvasWidth)
                                      });
     
   }
@@ -76,11 +79,11 @@
   
   socket.on('addNote', addNoteResponse);
   
-  function addNote(x, y, noteID) {
+  function addNote(percentLeft, percentTop, noteID) {
   
     socket.emit('addNote', {
-                              CoordX : x,
-                              CoordY : y,
+                              CoordX : percentLeft,
+                              CoordY : percentTop,
                               id : noteID
                            });
   }
@@ -88,8 +91,8 @@
   function addNoteResponse(data) {
 
     console.log('why u no work??!!!');
-    var newTop = data.CoordY;
-    var newLeft = data.CoordX;
+    var percentTop = data.CoordY;
+    var percentLeft = data.CoordX;
     var noteID = data.id;
     console.log(data);
     $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
@@ -100,8 +103,8 @@
                             })  //these are the event listeners that make the socket.io work
                  .on('drag', drag)
                  .css({
-                        'top': newTop,
-                        'left': newLeft
+                        'top': (percentTop * canvasHeight),
+                        'left': (percentLeft * canvasWidth)
                       });
     
     noteID++

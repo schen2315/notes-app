@@ -1,3 +1,11 @@
+
+//these values will change depending on the viewport/screen size
+//LATER IMPLEMENT JQUERY on resize event listener
+//to change these variables as the screen is resized.
+var canvasWidth = document.documentElement.clientWidth,
+    canvasHeight = document.documentElement.clientWidth * 0.52734;
+
+
 function openDialog() {
   Avgrund.show( "#default-popup" );
 }
@@ -62,10 +70,17 @@ $(document).ready( function(){
   function initializeNote(e) {
     
     //what does this mean?????
-    var newTop = e.pageY-menuHeight;
-    var newLeft = e.pageX;
-  
-
+    var newTop = e.pageY,
+        newLeft = e.pageX;
+    
+    
+    console.log(newTop + ',' + newLeft);
+    
+    var percentTop = ((newTop - menuHeight) / canvasHeight),
+        percentLeft = (newLeft / canvasWidth);
+    
+    console.log(percentTop);
+    console.log(percentLeft);
     $("#canvas").append("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
 
 
@@ -82,8 +97,8 @@ $(document).ready( function(){
     $("#addNote").show();
     $("#removeAll").data("cancel", false);
     //emit addNote event
-    console.log(newLeft, newTop, noteID);
-    addNote(newLeft, newTop, noteID);
+    console.log(percentLeft, percentTop, noteID);
+    addNote(percentLeft, percentTop, noteID);
     noteID++
 
   }

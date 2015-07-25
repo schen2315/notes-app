@@ -26,9 +26,9 @@ function appendText() {
 
 $(document).ready( function(){
   var noteID = 0;
-  var menuHeight = document.getElementById('menu').offsetHeight;
+  //var menuHeight = document.getElementById('menu').offsetHeight;
 
-  $("#addNote").click(function(){
+  $("#addNote, .add").click(function(){
     $("#removeAll").data("cancel",true);
     $("#addNote").hide();
 
@@ -76,7 +76,7 @@ $(document).ready( function(){
     
     console.log(newTop + ',' + newLeft);
     
-    var percentTop = ((newTop - menuHeight) / canvasHeight),
+    var percentTop = ((newTop /*- menuHeight*/) / canvasHeight),
         percentLeft = (newLeft / canvasWidth);
     
     console.log(percentTop);
@@ -87,6 +87,8 @@ $(document).ready( function(){
 
     $("#" + noteID).draggable({
                               containment: "#canvas",
+                              snap: "#canvas",
+                              snapMode: "inner",
                               opacity: 0.7
                             })  //these are the event listeners that make the socket.io work
                  .on('drag', drag)
@@ -102,4 +104,15 @@ $(document).ready( function(){
     noteID++
 
   }
+  
+  
+  $("#1").draggable({
+                            containment: "#canvas",
+                            snap: "#canvas",
+                            snapMode: "inner",
+                            opacity: 0.7
+                          })  //these are the event listeners that make the socket.io work
+               .on('drag', drag)
+               .on('click', staticClick);
+  
 });

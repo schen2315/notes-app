@@ -11,6 +11,7 @@ var gulp     = require('gulp');
 var rimraf   = require('rimraf');
 var router   = require('front-router');
 var sequence = require('run-sequence');
+var http = require('http');
 
 // Check for --production flag
 var isProduction = !!(argv.production);
@@ -52,11 +53,19 @@ var paths = {
   //Where all the magic happens
   ioJS : 'client/assets/js/io.js',
   
-  //personal styling options 
-  notesStyle : 'client/assets/css/notesStyle.css',
+  //personal styling options + jquery draggable css
+  css : [
+          'client/assets/css/notesStyle.css',
+          'client/assets/css/jquery-ui.min.css',
+          'client/assets/css/jquery-ui.structure.min.css'
+        ] ,
   
   //controlling the frontend notes behavior
-  notesJS : 'client/assets/js/notesJS.js'
+  notesJS : 'client/assets/js/notesJS.js',
+  
+  jquery : 'client/assets/js/jquery-2.1.4.min.js',
+  
+  'jquery-ui' : 'client/assets/js/jquery-ui.min.js'
 }
 
 // 3. TASKS
@@ -125,13 +134,40 @@ gulp.task('sass', function () {
 
 //get css to build folder
 gulp.task('css', function() {
-  return gulp.src('client/assets/css/notes-style.css')
+  return gulp.src(paths.css)
       .pipe(gulp.dest('./build/assets/css/'))
   ;
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io', 'uglify:notes']);
+gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io', 'uglify:notes', 'uglify:jquery', 'uglify:jquery-ui']);
+
+gulp.task('uglify:jquery', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths.jquery)
+    .pipe(uglify)
+    .pipe($.concat('jquery.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:jquery-ui', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths['jquery-ui'])
+    .pipe(uglify)
+    .pipe($.concat('jquery-ui.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
 
 gulp.task('uglify:foundation', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
@@ -212,40 +248,24 @@ gulp.task('server', ['build'], function() {
     }));
     */
 
-    var express = require('express');
-    var sockets = require('socket.io');
-    var path = require('path');
-    var http = require('http');
-
-    var app = express();
-    app.use(express.static(path.join(__dirname, '/build/')));
-    app.set('port', 8080);
-
-    var server = http.createServer(app);
-
-    server.listen(8080);
+        var express = require('express');
+        var sockets = require('socket.io');
+        var path = require('path');
+        var http = require('http');
+        var response = require('./ioserver');
     
-    var io = sockets(server);
+        var app = express();
+        app.use(express.static(path.join(__dirname, '/build/')));
+        app.set('port', 8080);
     
-    console.log('hey')
-    io.on('connection', function(socket) {
-
-      //CUSTOMIZABILITY FEATURE ADDON
-      //give a unique user id to each user and
-      //console it
-      console.log('a user connected');
-      //socket.on('disconnect', console.log('a user disconnected'));
-      socket.on('drag', function(data) {
-        console.log('moving');
-        socket.broadcast.emit('drag', data);
-      });
-      
-      socket.on('addNote', function(data) {
-        console.log('adding');
-        socket.broadcast.emit('addNote', data);
-      });
-      
-    });
+        var server = http.createServer(app);
+    
+        server.listen(8080);
+        
+        var io = sockets(server);
+        
+        console.log('hey')
+        io.on('connection', response.connection);
 
     
 

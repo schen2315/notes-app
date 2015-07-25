@@ -1,5 +1,5 @@
   var socket = io();
-
+  //var menuHeight = document.getElementById('menu').offsetHeight;
   //have the clientside socket listen to
   //the 'move' event
   //every time it gets the position of the note,
@@ -29,7 +29,7 @@
     socket.emit('drag', {
       id : note.attr('id'), position : {
                                           left : (ui.position.left/ canvasWidth),
-                                          top : (ui.position.top / canvasHeight)
+                                          top : ((ui.position.top)/ canvasHeight)
                                         }
     });
   }
@@ -98,8 +98,10 @@
     $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
     
     $("#" + noteID).draggable({
-                              containment: "#canvas",
-                              opacity: 0.7
+                                containment: "#canvas",
+                                snap: "#canvas",
+                                snapMode: "inner",
+                                opacity: 0.7
                             })  //these are the event listeners that make the socket.io work
                  .on('drag', drag)
                  .css({

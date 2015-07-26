@@ -80,7 +80,7 @@ $(document).ready( function(){
     
     console.log(percentTop);
     console.log(percentLeft);
-    $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='noteTitle'>StickyNote</div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
+    $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
     
     /*$("#canvas").append("<div class='note' id='" + noteID + "'></div>")
                 .child("#" + noteID)
@@ -107,7 +107,8 @@ $(document).ready( function(){
   */
 
   $("#" + noteID).draggabilly({
-                            containment: "#canvas"
+                            containment: "#canvas",
+                            handle: '.handle'
                           })   //these are the event listeners that make the socket.io work
                  .on('dragMove', drag)
                  .on('staticClick', staticClick);

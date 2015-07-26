@@ -100,10 +100,10 @@
     var percentLeft = data.CoordX;
     var noteID = data.id;
     console.log(data);
-    $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='noteTitle'>StickyNote</div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
-    
+    $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
     $("#" + noteID).draggabilly({
-                              containment: "#canvas"
+                              containment: "#canvas",
+                              handle: '.handle'
                             })  //these are the event listeners that make the socket.io work
                  .on('drag', drag)
                  .on('click', staticClick)

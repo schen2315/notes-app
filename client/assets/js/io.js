@@ -11,7 +11,7 @@
   socket.on('drag', dragResponse);
 
 
-  function drag(event, ui) {
+  function drag(event) {
     
     // --OPTIMIZATION NOTE--
     //later create the ability to append an array of notes
@@ -21,15 +21,18 @@
 
     //make sure you can see the clicked note
     note.css('z-index', '2').siblings().css('z-index', '0');
+    
+    
 
     console.log({
-      id : note.attr('id'), position : ui.position
+      id : note.attr('id'), position : $('#' + note.attr('id')).data('draggabilly').position
     });
     
+    var position = $('#' + note.attr('id')).data('draggabilly').position
     socket.emit('drag', {
       id : note.attr('id'), position : {
-                                          left : (ui.position.left/ canvasWidth),
-                                          top : ((ui.position.top)/ canvasHeight)
+                                          left : (position.x/ canvasWidth),
+                                          top : ((position.y)/ canvasHeight)
                                         }
     });
   }
@@ -49,6 +52,8 @@
     // --OPTIMIZATION NOTE--
     //later create the ability to append an array of notes
     //so that we can refer to that note
+    
+    
 
     $('#' + data.id.toString()).css({
                                        'top': (percentTop * canvasHeight),
@@ -64,7 +69,7 @@
     // --OPTIMIZATION NOTE--
     //later create the ability to append an array of notes
     //so that we can refer to that note
-
+  
     var note = $(this);
 
     //make sure you can see the clicked note
@@ -95,9 +100,18 @@
     var percentLeft = data.CoordX;
     var noteID = data.id;
     console.log(data);
-    $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
+    $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='noteTitle'>StickyNote</div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
     
-    $("#" + noteID).draggable({
+    $("#" + noteID).draggabilly({
+                              containment: "#canvas"
+                            })  //these are the event listeners that make the socket.io work
+                 .on('drag', drag)
+                 .on('click', staticClick)
+                 .css({
+                        'top': (percentTop * canvasHeight),
+                        'left': (percentLeft * canvasWidth)
+                      });
+  /*  $("#" + noteID).draggable({
                                 containment: "#canvas",
                                 snap: "#canvas",
                                 snapMode: "inner",
@@ -107,7 +121,7 @@
                  .css({
                         'top': (percentTop * canvasHeight),
                         'left': (percentLeft * canvasWidth)
-                      });
+                      }); */
     
     noteID++
   }

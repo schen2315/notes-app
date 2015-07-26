@@ -5,7 +5,7 @@
 var canvasWidth = document.documentElement.clientWidth,
     canvasHeight = document.documentElement.clientWidth * 0.52734;
 
-
+  
 function openDialog() {
   Avgrund.show( "#default-popup" );
 }
@@ -26,6 +26,9 @@ function appendText() {
 
 $(document).ready( function(){
   var noteID = 0;
+  
+  
+  
   //var menuHeight = document.getElementById('menu').offsetHeight;
 
   $("#addNote, .add").click(function(){
@@ -54,11 +57,7 @@ $(document).ready( function(){
 
   // making textareas in notes able to be focused on mobile devices
   // this code is a placeholder for now
-  $("input, textarea").each(function() {
-    $(this).click(function() {
-      $(this).focus();
-    });
-  });
+  
 
   //dude organize this mess
   //make seperate functions
@@ -81,18 +80,39 @@ $(document).ready( function(){
     
     console.log(percentTop);
     console.log(percentLeft);
-    $("#canvas").append("<div class='note' style='top:"+newTop+"px; left:"+newLeft+"px;' id='"+noteID+"'><div class='noteTitle'>Sticky Notes</div><textarea class='noteTextArea' placeholder='Text Here...'></textarea></div>");
+    $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='noteTitle'>StickyNote</div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
+    
+    /*$("#canvas").append("<div class='note' id='" + noteID + "'></div>")
+                .child("#" + noteID)
+                .css({
+                        'top' : newTop + "px",
+                        'left' : newLeft + "px"
+                      });*/
+                      
+                /*      $("<div></div>").appendTo("#canvas")
+                                       .attr('id', noteID)
+                                       .addClass('note')
+                                       .css({
+                                               'top' : newTop + "px",
+                                               'left' : newLeft + "px"
+                                             })
+                                       .append("<div class='handle'><form><div class='row'><div><label><div class='noteTitle'>Sticky Note</div> <textarea placeholder='type here'></textarea></label></div></div></form></div>")
+                                       ; 
+  /*  $("<form><div class='row'><div class='large-12 columns'><label><div class='noteTitle'>Sticky Note</div> <textarea placeholder='type here'></textarea></label></div></div></form>")
+          .appendTo('#' + noteID)
+          .child('textarea')
+          .on('click', function() {
+            event.stopPropogation();
+          });
+  */
 
-
-
-    $("#" + noteID).draggable({
-                              containment: "#canvas",
-                              snap: "#canvas",
-                              snapMode: "inner",
-                              opacity: 0.7
-                            })  //these are the event listeners that make the socket.io work
-                 .on('drag', drag)
-                 .on('click', staticClick);
+  $("#" + noteID).draggabilly({
+                            containment: "#canvas"
+                          })   //these are the event listeners that make the socket.io work
+                 .on('dragMove', drag)
+                 .on('staticClick', staticClick);
+                 
+                
 
     $("#canvas").off("click");
     $("#add-to-canvas").remove();
@@ -103,16 +123,5 @@ $(document).ready( function(){
     addNote(percentLeft, percentTop, noteID);
     noteID++
 
-  }
-  
-  
-  $("#1").draggable({
-                            containment: "#canvas",
-                            snap: "#canvas",
-                            snapMode: "inner",
-                            opacity: 0.7
-                          })  //these are the event listeners that make the socket.io work
-               .on('drag', drag)
-               .on('click', staticClick);
-  
+  }  
 });

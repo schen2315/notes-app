@@ -105,7 +105,7 @@
                               containment: "#canvas",
                               handle: '.handle'
                             })  //these are the event listeners that make the socket.io work
-                 .on('drag', drag)
+                 .on('dragMove', drag)
                  .on('click', staticClick)
                  .css({
                         'top': (percentTop * canvasHeight),

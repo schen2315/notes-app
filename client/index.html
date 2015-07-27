@@ -242,7 +242,7 @@
             <div class="menu-group primary">
               <div class="menu-group-left">
                 <ul class="primary menu-bar">
-                  <li class="show-for-large-only"><a href="#" zf-toggle="panel"><strong>Toggle Panel</strong></a></li>
+                  <li><a href="#" zf-toggle="panel"><strong>Toggle Panel</strong></a></li>
                   <li><a id="addNote"><strong>+</strong></a></li>
                   <li>
                     <a href="#" onclick="javascript:openDialog();" zf-close="panel" class="fast"><strong>Share</strong></a>
@@ -253,11 +253,41 @@
                 <ul class="primary menu-bar">
                   <li>
                     <a href="#" onclick="javascript:openSecondDialog();" zf-close="panel" class="fast"><strong>×</strong></a>
+                    <!-- Deletes -->
                   </li>
                 </ul>
               </div>
             </div>
           </div>
+          
+          <!--<div class="grid-block vertical">-->
+            <div class="grid-block">
+              <div id="canvas" style="height:52.734375vw;width:100vw;border: 4px solid pink">
+              </div>
+              <div zf-panel="" id="panel">
+                <!-- show-for-large-only is annoying when proj is in wip -->
+              <div class="grid-content shrink collapse">
+                <div class="menu-group primary">
+                  <div class="menu-group-left">
+                    <ul class="primary condense menu-bar">
+                      <li><a><strong>Project List</strong></a></li>
+                      <!-- Project list is supposed to be unclickable -->
+                    </ul>
+                  </div>
+                  <div class="menu-group-right">
+                    <ul class="primary condense menu-bar">
+                      <li><a onclick="appendText()"><strong>New Project</strong></a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="grid-content" id="test"></div>
+            </div>
+          </div>
+          <!--</div>-->
+
+    
+          <!--
           <div class="grid-block">
       
               <div zf-panel="" id="panel">
@@ -273,33 +303,28 @@
                 <div class="grid-content" id="test"></div>
               </div>
           </div> 
-        
-        
-        <aside id="default-popup" class="avgrund-popup">
-          <a onclick="javascript:closeDialog();" class="close-button">×</a>
-          <h2>Share All?</h2>
-          <p>Share All</p>
-            <button onclick="javascript:closeDialog();">Yes</button>
-            <button onclick="javascript:closeDialog();">No</button>
-        </aside>
-
-        <aside id="second-popup" class="avgrund-popup">
-          <a onclick="javascript:closeDialog();" class="close-button">×</a>
-          <h2>Delete All?</h2>
-          <p>Delete All</p>
-            <button onclick="javascript:closeDialog();" id="removeAll">Yes</button>
-            <button onclick="javascript:closeDialog();">No</button>
-        </aside>
-
-        <div class="avgrund-cover"></div>
-        
-          <button style="position:absolute; top: 10vh; left: 80vw; z-index: 3" class="add">add</button>
+        -->
+            
+          <!--<button style="position:absolute; top: 10vh; left: 80vw; z-index: 3" class="add">add</button>
           <div id="canvas" style="height:52.734375vw;width:100vw;border: 4px solid pink">
-            
-            
-
-          </div>
+          </div>-->
       </div>
+      <aside id="default-popup" class="avgrund-popup">
+        <a onclick="javascript:closeDialog();" class="close-button">×</a>
+        <h2>Share All?</h2>
+        <p>Share All</p>
+          <button onclick="javascript:closeDialog();">Yes</button>
+          <button onclick="javascript:closeDialog();">No</button>
+      </aside>
+
+      <aside id="second-popup" class="avgrund-popup">
+        <a onclick="javascript:closeDialog();" class="close-button">×</a>
+        <h2>Delete All?</h2>
+        <p>Delete All</p>
+          <button onclick="javascript:closeDialog();" id="removeAll">Yes</button>
+          <button onclick="javascript:closeDialog();">No</button>
+      </aside>
+
       <div class="avgrund-cover"></div>
         
     <!--online resource fallback-->

@@ -29,7 +29,7 @@ $(document).ready( function(){
   
   
   
-  //var menuHeight = document.getElementById('menu').offsetHeight;
+  var menuHeight = document.getElementById('menu').offsetHeight;
 
   $("#addNote, .add").click(function(){
     $("#removeAll").data("cancel",true);
@@ -75,11 +75,12 @@ $(document).ready( function(){
     
     console.log(newTop + ',' + newLeft);
     
-    var percentTop = ((newTop /*- menuHeight*/) / canvasHeight),
+    var percentTop = ((newTop - menuHeight) / canvasHeight),
         percentLeft = (newLeft / canvasWidth);
     
     console.log(percentTop);
     console.log(percentLeft);
+    newTop = newTop - menuHeight;
     $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
     
     /*$("#canvas").append("<div class='note' id='" + noteID + "'></div>")

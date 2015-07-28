@@ -14,9 +14,9 @@
     <script src="/assets/js/routes.js" type="text/javascript"></script>
     <script src="/assets/js/app.js" type="text/javascript"></script>
     <!--<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">-->
-    <link href="/assets/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
+    <!--<link href="/assets/css/jquery-ui.min.css" rel="stylesheet" type="text/css">
     <link href="/assets/css/jquery-ui.structure.min.css" rel="stylesheet" type="text/css">
-    
+    -->
     <style>
 
     /*Avgrund styleee~~~*/
@@ -314,7 +314,7 @@
           </div>-->
       </div>
       <aside id="default-popup" class="avgrund-popup">
-        <a onclick="javascript:closeDialog();" class="close-button">×</a>
+        <a onclick="javascript:closeDialog();" class="close-button">x</a>
         <h2>Share All?</h2>
         <p>Share All</p>
           <button onclick="javascript:closeDialog();">Yes</button>
@@ -327,6 +327,18 @@
         <p>Delete All</p>
           <button onclick="javascript:closeDialog();" id="removeAll">Yes</button>
           <button onclick="javascript:closeDialog();">No</button>
+      </aside>
+      
+      <aside id="username" class="avgrund-popup">
+        <h2>Hi, what would you like to be called? </h2>
+        <form>
+          <input type="text"></input>
+          <button id="Okay">Okay!</button>
+        </form>
+      </aside>
+      
+      <aside id="update" class="avgrund-popup">
+        <h3>Updating, please wait patiently as a new user connects</h3>
       </aside>
 
       <div class="avgrund-cover"></div>
@@ -352,9 +364,9 @@
     </script>
     -->    
     <script src="http://cdnjs.cloudflare.com/ajax/libs/draggabilly/1.2.0/draggabilly.pkgd.min.js"></script>
+    <script src="/assets/js/socket.io.js"></script> 
     <script src="/assets/js/notesJS.js" type="text/javascript"></script>
-    <script src="/assets/js/socket.io.js"></script>
-    <script src="/assets/js/io.js"></script>  
+    <script src="/assets/js/io.js"></script> 
     <script>
     // Added this javascript for the panel
     function appendText() {
@@ -443,8 +455,8 @@
 
 })();
 
-// Opening the Avgrund modals
-function openDialog() {
+    // Opening the Avgrund modals
+    function openDialog() {
       Avgrund.show( "#default-popup" );
     }
     function openSecondDialog() {
@@ -455,6 +467,7 @@ function openDialog() {
     }
 
     </script>
+    
   </body>
 </html>
 

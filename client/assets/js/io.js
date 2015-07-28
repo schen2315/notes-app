@@ -1,4 +1,4 @@
-  var socket = io();
+  //var socket = io();
   //var menuHeight = document.getElementById('menu').offsetHeight;
   //have the clientside socket listen to
   //the 'move' event
@@ -54,7 +54,7 @@
     //so that we can refer to that note
     
     
-
+    
     $('#' + data.id.toString()).css({
                                        'top': (percentTop * canvasHeight),
                                        'left': (percentLeft * canvasWidth)
@@ -123,5 +123,45 @@
                         'left': (percentLeft * canvasWidth)
                       }); */
     
-    noteID++
+    queryLength();
+  }
+  
+  socket.on('user', userResponse);
+  
+  function userResponse(data) {
+    console.log(data);
+    //put something here that tells the user that a new user (with their name) is connecting
+  }
+  
+  socket.on('session', function(data) {
+    console.log(data);
+    console.log('boobs');
+    Avgrund.show("#update");
+    update(data, updateCallback);
+    
+  })
+  
+  function update(data, callback) {
+    var session = data;
+        console.log(1);
+    var publicTab = data.publicTab;
+        console.log(2);
+    var users = data.users;
+       
+    console.log(noteID); 
+    $(".note").remove();
+    //noteID = 0;
+    
+    for(var i = 0; i < noteID; i++ ) {
+        console.log('hey');
+        addNoteResponse(publicTab[i]);
+    }
+    
+    //fix callback later so that the update avgrund dialog only closes when eveyone is finished loading.
+    callback();
+  }
+  function updateCallback() {
+    setTimeout(function() {
+      Avgrund.hide();
+    }, 1000);
   }

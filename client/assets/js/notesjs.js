@@ -4,33 +4,44 @@
 //to change these variables as the screen is resized.
 var canvasWidth = document.documentElement.clientWidth,
     canvasHeight = document.documentElement.clientWidth * 0.52734;
+var noteID;
+var socket = io();
+///get the # of notes from the backend
+function queryLength() {
+  socket.emit('queryLength', {});
+}
+//when we get our response, change the value of noteID.
+socket.on('queryLength', function(data) {
+  //set noteID to be the value of publicTab.length
+  noteID = data;
+})  
 
-  
-function openDialog() {
-  Avgrund.show( "#default-popup" );
-}
-function openSecondDialog() {
-  Avgrund.show( "#second-popup" );
-}
-function closeDialog() {
-  Avgrund.hide();
-}
 function appendText() {
   var Project = ("<a class='button' style='margin: 8px;'>Project</a><hr>")
   $("#test").append(Project);
 }
 
+function username() {
+  Avgrund.show("#username");
+}
 
 // problems right now:
 // fix the entire code
 
 $(document).ready( function(){
-  var noteID = 0;
   
-  
-  
+  function username() {
+    Avgrund.show("#username");
+  }
+  queryLength();
+  username();
   var menuHeight = document.getElementById('menu').offsetHeight;
-
+  $("#Okay").click(function() {
+    username = $('#username').children('form').children('input').val();
+    socket.emit('user', username);
+    console.log( $('#username').children('form').children('input').val());
+    Avgrund.hide();
+  })
   $("#addNote, .add").click(function(){
     $("#removeAll").data("cancel",true);
     $("#addNote").hide();
@@ -45,6 +56,8 @@ $(document).ready( function(){
     if (!($("#removeAll").data("cancel"))) {
       $(".note").remove();
       noteID = 0;
+      
+      //^^fix this later, it won't work anymore.
     }else{
       $("#canvas").off("click");
       $("#add-to-canvas").remove();
@@ -123,7 +136,9 @@ $(document).ready( function(){
     //emit addNote event
     console.log(percentLeft, percentTop, noteID);
     addNote(percentLeft, percentTop, noteID);
-    noteID++
-
+    
+    console.log(noteID);
+    
+    queryLength();
   }  
 });

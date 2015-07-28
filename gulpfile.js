@@ -266,8 +266,8 @@ gulp.task('server', ['build'], function() {
         
         console.log('hey')
         io.on('connection', response.connection);
-
-    
+        
+        
 
 });
 

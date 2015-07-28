@@ -1,0 +1,28 @@
+.note > * {
+      position: relative;
+}
+.note {
+      width: 10vw;
+      height:10vw;
+      background:#FFFF99;
+      position: absolute;
+}
+.note .handle {
+      position: absolute;
+      left: 0vw;
+      top: 0vw;
+      width: 100%;
+      height: 100%;
+}
+
+.note textarea {
+  background: transparent;
+}
+
+#context-menu {
+  background: white;
+  border: 1px solid black;
+  position: absolute;
+  display: none;
+  z-index: 1000;
+}

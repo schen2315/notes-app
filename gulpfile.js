@@ -11,6 +11,7 @@ var gulp     = require('gulp');
 var rimraf   = require('rimraf');
 var router   = require('front-router');
 var sequence = require('run-sequence');
+var http = require('http');
 
 // Check for --production flag
 var isProduction = !!(argv.production);
@@ -45,7 +46,26 @@ var paths = {
   // These files are for your app's JavaScript
   appJS: [
     'client/assets/js/app.js'
-  ]
+  ],
+  //These are the socket.io clientside file 
+  socketIoJS : 'client/assets/js/socket.io.js',
+  
+  //Where all the magic happens
+  ioJS : 'client/assets/js/io.js',
+  
+  //personal styling options + jquery draggable css
+  css : [
+          'client/assets/css/notesStyle.css',
+          'client/assets/css/jquery-ui.min.css',
+          'client/assets/css/jquery-ui.structure.min.css'
+        ] ,
+  
+  //controlling the frontend notes behavior
+  notesJS : 'client/assets/js/notesJS.js',
+  
+  jquery : 'client/assets/js/jquery-2.1.4.min.js',
+  
+  'jquery-ui' : 'client/assets/js/jquery-ui.min.js'
 }
 
 // 3. TASKS
@@ -112,8 +132,42 @@ gulp.task('sass', function () {
   ;
 });
 
+//get css to build folder
+gulp.task('css', function() {
+  return gulp.src(paths.css)
+      .pipe(gulp.dest('./build/assets/css/'))
+  ;
+});
+
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app'])
+gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io', 'uglify:notes', 'uglify:jquery', 'uglify:jquery-ui']);
+
+gulp.task('uglify:jquery', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths.jquery)
+    .pipe(uglify)
+    .pipe($.concat('jquery.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:jquery-ui', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths['jquery-ui'])
+    .pipe(uglify)
+    .pipe($.concat('jquery-ui.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
 
 gulp.task('uglify:foundation', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
@@ -141,8 +195,49 @@ gulp.task('uglify:app', function() {
   ;
 });
 
+gulp.task('uglify:socket', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function(e) {
+      console.log(e);
+    }));
+    
+  return gulp.src(paths.socketIoJS)
+    .pipe(uglify)
+    .pipe($.concat('socket.io.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:io', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function(e) {
+      console.log(e);
+    }));
+    
+  return gulp.src(paths.ioJS)
+    .pipe(uglify)
+    .pipe($.concat('io.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
+
+gulp.task('uglify:notes', function() {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function(e) {
+      console.log(e);
+    }));
+    
+  return gulp.src(paths.notesJS)
+    .pipe(uglify)
+    .pipe($.concat('notesJS.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+})
+
 // Starts a test server, which you can view at http://localhost:8080
+//take this out and swap for an express server.
 gulp.task('server', ['build'], function() {
+    /*
   gulp.src('./build')
     .pipe($.webserver({
       port: 8080,
@@ -150,13 +245,35 @@ gulp.task('server', ['build'], function() {
       fallback: 'index.html',
       livereload: true,
       open: true
-    }))
-  ;
+    }));
+    */
+
+        var express = require('express');
+        var sockets = require('socket.io');
+        var path = require('path');
+        var http = require('http');
+        var response = require('./ioserver');
+    
+        var app = express();
+        app.use(express.static(path.join(__dirname, '/build/')));
+        app.set('port', 8080);
+    
+        var server = http.createServer(app);
+    
+        server.listen(8080);
+        
+        var io = sockets(server);
+        
+        console.log('hey')
+        io.on('connection', response.connection);
+
+    
+
 });
 
 // Builds your entire app once, without starting a server
 gulp.task('build', function(cb) {
-  sequence('clean', ['copy', 'copy:foundation', 'sass', 'uglify'], 'copy:templates', cb);
+  sequence('clean', ['copy', 'copy:foundation', 'sass', 'css', 'uglify'], 'copy:templates', cb);
 });
 
 // Default task: builds your app, starts a server, and recompiles assets when they change

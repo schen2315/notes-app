@@ -18,3 +18,11 @@
 .note textarea {
   background: transparent;
 }
+
+#context-menu {
+  background: white;
+  border: 1px solid black;
+  position: absolute;
+  display: none;
+  z-index: 1000;
+}

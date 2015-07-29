@@ -12,7 +12,7 @@
 
 
   function drag(event) {
-    
+
     // --OPTIMIZATION NOTE--
     //later create the ability to append an array of notes
     //so that we can refer to that note
@@ -21,13 +21,11 @@
 
     //make sure you can see the clicked note
     note.css('z-index', '2').siblings().css('z-index', '0');
-    
-    
 
     console.log({
       id : note.attr('id'), position : $('#' + note.attr('id')).data('draggabilly').position
     });
-    
+
     var position = $('#' + note.attr('id')).data('draggabilly').position
     socket.emit('drag', {
       id : note.attr('id'), position : {
@@ -36,9 +34,9 @@
                                         }
     });
   }
-  
+
   function dragResponse(data) {
-    
+
     var id = data.id,
         percentLeft = data.position.left,
         percentTop = data.position.top;
@@ -48,51 +46,57 @@
     //add a 'click' socket message event
     //For every JQuery event listener
     //make a corresponding socket
-    
+
     // --OPTIMIZATION NOTE--
     //later create the ability to append an array of notes
     //so that we can refer to that note
-    
-    
-    
     $('#' + data.id.toString()).css({
                                        'top': (percentTop * canvasHeight),
                                        'left': (percentLeft * canvasWidth)
                                      });
-    
+
   }
-  
+
   socket.on('staticClick', staticClickResponse)
-  
+
   function staticClick(event) {
-    
+
     // --OPTIMIZATION NOTE--
     //later create the ability to append an array of notes
     //so that we can refer to that note
-  
+
     var note = $(this);
 
     //make sure you can see the clicked note
-    note.css('z-index', '2').siblings().css('z-index', '0');
+    note.css('z-index', '2').siblings().css('z-index', '0').siblings('#context-menu').css('z-index','1000');
     
-    
+    //determine if context-menu should be displayed on the left or on the right
+    if ($(this).position().left+$(this).width()+contextMenu.width()>=$('#canvas').width()){
+      contextMenu.css('left',$(this).position().left-contextMenu.width());
+    } else {
+      contextMenu.css('left',$(this).position().left+$(this).width());
+    }
+    //get top position and show
+    contextMenu.css('top', $(this).position().top).show();
+    //remember selected note if opened
+    contextMenu.data('selectedNote',$(this).attr('id'));
   }
-  
+
   function staticClickResponse() {
-    
+
   }
-  
+
   socket.on('addNote', addNoteResponse);
-  
+
   function addNote(percentLeft, percentTop, noteID) {
-  
+
     socket.emit('addNote', {
                               CoordX : percentLeft,
                               CoordY : percentTop,
                               id : noteID
                            });
   }
-  
+
   function addNoteResponse(data) {
 
     console.log('why u no work??!!!');
@@ -121,8 +125,7 @@
                  .css({
                         'top': (percentTop * canvasHeight),
                         'left': (percentLeft * canvasWidth)
-                      }); */
-    
+                      }); */    
     queryLength();
   }
   
@@ -164,4 +167,11 @@
     setTimeout(function() {
       Avgrund.hide();
     }, 1000);
+  }
+  
+  function dragStart() {
+    //hide context-menu while moving
+    contextMenu.hide();
+    //lose selected note
+    contextMenu.data('selectedNote',-1);
   }

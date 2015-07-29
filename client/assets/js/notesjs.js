@@ -26,6 +26,15 @@ function username() {
   Avgrund.show("#username");
 }
 
+$(document).mouseup(function (e){
+    // if the target of the click isn't the context-menu nor a descendant of the context-menu
+    if (!contextMenu.is(e.target) && contextMenu.has(e.target).length === 0 && contextMenu.is(':visible')){
+      contextMenu.hide();
+      //lose data of selected note
+      contextMenu.data('selectedNote',-1);
+    }
+});
+
 // problems right now:
 // fix the entire code
 
@@ -47,14 +56,14 @@ $(document).ready( function(){
     console.log( $('#username').children('form').children('input').val());
     Avgrund.hide();
   })
-  $(document).mouseup(function (e){
-      // if the target of the click isn't the context-menu nor a descendant of the context-menu
-      if (!contextMenu.is(e.target) && contextMenu.has(e.target).length === 0 && contextMenu.is(':visible')){
-        contextMenu.hide();
-        //lose data of selected note
-        contextMenu.data('selectedNote',-1);
-      }
-  });
+  // $(document).mouseup(function (e){
+  //     // if the target of the click isn't the context-menu nor a descendant of the context-menu
+  //     if (!contextMenu.is(e.target) && contextMenu.has(e.target).length === 0 && contextMenu.is(':visible')){
+  //       contextMenu.hide();
+  //       //lose data of selected note
+  //       contextMenu.data('selectedNote',-1);
+  //     }
+  // });
 
   //delete specific note
   $("#delete").click(function(){
@@ -138,7 +147,12 @@ $(document).ready( function(){
                           })   //these are the event listeners that make the socket.io work
                  .on('dragMove', drag)
                  .on('staticClick', staticClick)
-                 .on('dragStart',dragStart);
+                 .on('dragStart', function dragStart() {
+                     //hide context-menu while moving
+                     contextMenu.hide();
+                     //lose selected note
+                     contextMenu.data('selectedNote',-1);
+                   });
 
 
     $("#canvas").off("click");

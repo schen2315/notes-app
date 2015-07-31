@@ -93,6 +93,7 @@ $(document).ready( function(){
   $("#addNote, .add").click(function(){
     $("#removeAll").data("cancel",true);
     $("#addNote").hide();
+    $('#dark-screen').css('z-index','3').fadeIn(250);
 
     $("#canvas").prepend("<h2 id='add-to-canvas'>Add your note to the blank space. </h2>");
 

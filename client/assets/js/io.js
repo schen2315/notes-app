@@ -23,10 +23,10 @@
     note.css('z-index', '2').siblings().css('z-index', '0');
 
     console.log({
-      id : note.attr('id'), position : $('#' + note.attr('id')).data('draggabilly').position
+      id : note.attr('id'), position : /*$('#' + note.attr('id')).data('draggabilly').position*/ note.data('draggabilly').position
     });
 
-    var position = $('#' + note.attr('id')).data('draggabilly').position
+    var position = note.data('draggabilly').position
     socket.emit('drag', {
       id : note.attr('id'), position : {
                                           left : (position.x/ canvasWidth),
@@ -34,6 +34,45 @@
                                         }
     });
   }
+
+
+  socket.on('keyup', keyupResponse)
+  //when a user types on the note:
+  function keyup() {
+    //id, position, text
+    var note = $(this).parent("div"),
+        id = note.attr("id"),
+        position = note.data("draggabilly").position,
+        text = $(this).val();
+        
+    var object = {
+          id: id,
+          position: { left : (position.x/ canvasWidth),
+                      top : ((position.y)/ canvasHeight) },
+          text: text
+        }
+    console.log(object);
+    socket.emit('keyup', object);
+  }
+
+  //this is what the other clients will see
+  function keyupResponse(data) {
+    
+      //make sure to disable textarea when someone else is typing
+      var id = data.id,
+          text = data.text;
+          
+      console.log('i got the data!')
+      //make sure to disable textarea when someone else is typing    
+      $('#' + data.id.toString())
+                  .children("textarea")
+                  //.attr("disabled", "")
+                  .val(text);
+                  
+      
+  }
+
+
 
   function dragResponse(data) {
 
@@ -100,8 +139,8 @@
   function addNoteResponse(data) {
 
     console.log('why u no work??!!!');
-    var percentTop = data.CoordY;
-    var percentLeft = data.CoordX;
+    var percentTop = data.CoordY || data.position.top;
+    var percentLeft = data.CoordX || data.position.left;
     var noteID = data.id;
     console.log(data);
     $('#canvas').append("<div class='note' id='"+ noteID +"'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
@@ -114,7 +153,16 @@
                  .css({
                         'top': (percentTop * canvasHeight),
                         'left': (percentLeft * canvasWidth)
-                      });
+                      })
+                 .on('dragStart', function dragStart() {
+                         //hide context-menu while moving
+                         contextMenu.hide();
+                         //lose selected note
+                         contextMenu.data('selectedNote',-1);
+                      })
+                 .children('textarea')
+                 .on('keypress', keyup)
+                 .on('keyup', keyup);
   /*  $("#" + noteID).draggable({
                                 containment: "#canvas",
                                 snap: "#canvas",
@@ -158,12 +206,15 @@
     for(var i = 0; i < noteID; i++ ) {
         console.log('hey');
         addNoteResponse(publicTab[i]);
+        keyupResponse(publicTab[i]);
     }
     
     //fix callback later so that the update avgrund dialog only closes when eveyone is finished loading.
     callback();
   }
   function updateCallback() {
+    
+    //on update, everybody waits one second
     setTimeout(function() {
       Avgrund.hide();
     }, 1000);

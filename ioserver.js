@@ -53,6 +53,11 @@ response.connection = function(socket) {
     
   });
   
+  socket.on('keyup', function(data) {
+    session.publicTab[data.id] = data;
+    socket.broadcast.emit('keyup', data);
+  })
+  
   //upon query of # of notes
   socket.on('queryLength', function() {
     socket.emit('queryLength', session.publicTab.length);

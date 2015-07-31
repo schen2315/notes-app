@@ -152,7 +152,10 @@ $(document).ready( function(){
                      contextMenu.hide();
                      //lose selected note
                      contextMenu.data('selectedNote',-1);
-                   });
+                   })
+                 .children('textarea')
+                 .on('keypress', keyup)
+                 .on('keyup', keyup);
 
 
     $("#canvas").off("click");

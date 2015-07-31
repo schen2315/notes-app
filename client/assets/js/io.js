@@ -68,18 +68,23 @@
     var note = $(this);
 
     //make sure you can see the clicked note
-    note.css('z-index', '2').siblings().css('z-index', '0').siblings('#context-menu').css('z-index','1000');
-    
+    note.css('z-index', '2').siblings().css('z-index', '0').siblings('#context-menu').css('z-index','1000').siblings('#dark-screen').css('z-index','1');
+
     //determine if context-menu should be displayed on the left or on the right
-    if ($(this).position().left+$(this).width()+contextMenu.width()>=$('#canvas').width()){
-      contextMenu.css('left',$(this).position().left-contextMenu.width());
+    if (note.position().left+note.width()+contextMenu.width()>=$('#canvas').width()){
+      contextMenu.css('left',note.position().left-contextMenu.width());
     } else {
-      contextMenu.css('left',$(this).position().left+$(this).width());
+      contextMenu.css('left',note.position().left+note.width());
     }
     //get top position and show
-    contextMenu.css('top', $(this).position().top).show();
+    if (note.position().top+contextMenu.height()>=$('#canvas').height()){
+      contextMenu.css('top',note.position().top-(contextMenu.height()-note.height()));
+    }else{
+      contextMenu.css('top', note.position().top)
+    }
+    contextMenu.show();
     //remember selected note if opened
-    contextMenu.data('selectedNote',$(this).attr('id'));
+    contextMenu.data('selectedNote',note.attr('id'));
   }
 
   function staticClickResponse() {
@@ -125,41 +130,41 @@
                  .css({
                         'top': (percentTop * canvasHeight),
                         'left': (percentLeft * canvasWidth)
-                      }); */    
+                      }); */
     queryLength();
   }
-  
+
   socket.on('user', userResponse);
-  
+
   function userResponse(data) {
     console.log(data);
     //put something here that tells the user that a new user (with their name) is connecting
   }
-  
+
   socket.on('session', function(data) {
     console.log(data);
     console.log('boobs');
     Avgrund.show("#update");
     update(data, updateCallback);
-    
+
   })
-  
+
   function update(data, callback) {
     var session = data;
         console.log(1);
     var publicTab = data.publicTab;
         console.log(2);
     var users = data.users;
-       
-    console.log(noteID); 
+
+    console.log(noteID);
     $(".note").remove();
     //noteID = 0;
-    
+
     for(var i = 0; i < noteID; i++ ) {
         console.log('hey');
         addNoteResponse(publicTab[i]);
     }
-    
+
     //fix callback later so that the update avgrund dialog only closes when eveyone is finished loading.
     callback();
   }
@@ -168,7 +173,7 @@
       Avgrund.hide();
     }, 1000);
   }
-  
+
   function dragStart() {
     //hide context-menu while moving
     contextMenu.hide();

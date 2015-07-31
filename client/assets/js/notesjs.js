@@ -16,7 +16,7 @@ function queryLength() {
 socket.on('queryLength', function(data) {
   //set noteID to be the value of publicTab.length
   noteID = data;
-})  
+})
 
 function appendText() {
   var Project = ("<a class='button' style='margin: 8px;'>Project</a><hr>")
@@ -35,21 +35,19 @@ $(document).mouseup(function (e){
     }
 });
 
-// problems right now:
-// fix the entire code
 
 $(document).ready( function(){
-  
-  
+
+
   //instead of calling noteID++, we need to call queryLength so that
   //it gets the value from the backend. Using a local variable means
   //every connected client may have difference values for noteID,
   //which causes bugs.
-  
+
   //CALL queryLength , DO NOT DO noteID++
   queryLength();
   username();
-  
+
   $("#Okay").click(function() {
     username = $('#username').children('form').children('input').val();
     socket.emit('user', username);
@@ -67,9 +65,29 @@ $(document).ready( function(){
 
   //delete specific note
   $("#delete").click(function(){
-    $("#"+contextMenu.data("selectedNote")).remove();
+    $("#"+contextMenu.data("selectedNote")).fadeOut(250,function(){
+      $(this).remove();
+    });
     contextMenu.hide();
     contextMenu.data('selectedNote',-1);
+  });
+
+  //enable resizing
+  $("#resize").click(function(){
+    var selectedNote = $("#"+contextMenu.data("selectedNote"));
+    selectedNote.css('resize','both');
+    //disable dragging the note
+    selectedNote.children('.handle').css('width','0%').css('height','0%');
+    contextMenu.hide();
+    contextMenu.data('selectedNote',-1);
+    //embrace the darkness
+    $('#dark-screen').fadeIn(250);
+    //if you click the darkness everything should return to normal
+    $('#dark-screen').click(function(){
+      $(this).fadeOut(250);
+      selectedNote.css('resize','none');
+      selectedNote.children('.handle').css('width','100%').css('height','100%');
+    });
   });
 
   $("#addNote, .add").click(function(){
@@ -84,15 +102,16 @@ $(document).ready( function(){
 
   $("#removeAll").click(function(){
     if (!($("#removeAll").data("cancel"))) {
-      $(".note").remove();
+      $(".note").fadeOut(250, function(){
+        $(this).remove;
+      })
       noteID = 0;
-      
+
       //^^fix this later, it won't work anymore.
     } else {
       $("#canvas").off("click");
       $("#add-to-canvas").remove();
-
-      //here we emit the remove event
+      $('#dark-screen').fadeOut(250);
       $("#addNote").show();
       $("#removeAll").data("cancel",false);
     }
@@ -159,12 +178,13 @@ $(document).ready( function(){
     $("#add-to-canvas").remove();
     $("#addNote").show();
     $("#removeAll").data("cancel", false);
+    $("dark-screen").fadeOut(250);
     //emit addNote event
     console.log(percentLeft, percentTop, noteID);
     addNote(percentLeft, percentTop, noteID);
-    
+
     console.log(noteID);
-    
+
     queryLength();
-  }  
+  }
 });

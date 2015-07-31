@@ -6,6 +6,8 @@
       height:10vw;
       background:#FFFF99;
       position: absolute;
+    	box-shadow:4px 4px 8px #1c1c1c;
+      overflow: auto;
 }
 .note .handle {
       position: absolute;
@@ -17,7 +19,11 @@
 
 .note textarea {
   background: transparent;
+  resize: none;
+  width: 100%;
 }
+
+.note textarea::-webkit-scrollbar{width: 0;}
 
 #context-menu {
   background: white;
@@ -25,4 +31,18 @@
   position: absolute;
   display: none;
   z-index: 1000;
+  box-shadow: 3px 3px 3px #888888;
+}
+
+#dark-screen {
+  background: black;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: alpha(opacity=60);
+  display: none;
+  opacity: 0.6;
+  position: absolute;
+  z-index: 1;
 }

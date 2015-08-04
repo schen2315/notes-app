@@ -6,6 +6,8 @@ var canvasWidth = document.documentElement.clientWidth,
     canvasHeight = document.documentElement.clientWidth * 0.52734;
 var menuHeight = document.getElementById('menu').offsetHeight;
 var contextMenu = $("#context-menu");
+var colorPicker = $('#color-picker');
+var selectedNote;
 var noteID;
 var socket = io();
 //get the # of notes from the backend
@@ -63,6 +65,29 @@ $(document).ready( function(){
   //     }
   // });
 
+  //change color of note
+  $("#customize").click(function(){
+    //open color-picker and set position of color-picker
+    colorPicker.show().css('left', contextMenu.position().left).css('top', contextMenu.position().top);
+    selectedNote = $("#"+contextMenu.data("selectedNote"));
+    //disable dragging the note
+    selectedNote.children('.handle').css('width','0%').css('height','0%');
+    contextMenu.hide();
+    contextMenu.data('selectedNote',-1);
+    //click color
+    $("#color-picker div").click(function(){
+      selectedNote.css('background',$(this).attr('id'));
+    });
+    //embrace the darkness
+    $('#dark-screen').fadeIn(250);
+    //if you click the darkness everything should return to normal
+    $('#dark-screen').click(function(){
+      $(this).fadeOut(250);
+      colorPicker.hide();
+      selectedNote.children('.handle').css('width','100%').css('height','100%');
+    });
+  });
+
   //delete specific note
   $("#delete").click(function(){
     $("#"+contextMenu.data("selectedNote")).fadeOut(250,function(){
@@ -74,7 +99,7 @@ $(document).ready( function(){
 
   //enable resizing
   $("#resize").click(function(){
-    var selectedNote = $("#"+contextMenu.data("selectedNote"));
+    selectedNote = $("#"+contextMenu.data("selectedNote"));
     selectedNote.css('resize','both');
     //disable dragging the note
     selectedNote.children('.handle').css('width','0%').css('height','0%');
@@ -106,7 +131,7 @@ $(document).ready( function(){
       $(".note").fadeOut(250, function(){
         $(this).remove;
       })
-      noteID = 0;
+        noteID = 0;
 
       //^^fix this later, it won't work anymore.
     } else {
@@ -118,7 +143,7 @@ $(document).ready( function(){
     }
   });
 
-
+  // $("#canvas").dblclick(initializeNote);
 
   function initializeNote(e) {
 
@@ -181,8 +206,8 @@ $(document).ready( function(){
     $("#canvas").off("click");
     $("#add-to-canvas").remove();
     $("#addNote").show();
+    $('#dark-screen').fadeOut(250);
     $("#removeAll").data("cancel", false);
-    $("dark-screen").fadeOut(250);
     //emit addNote event
     console.log(percentLeft, percentTop, noteID);
     addNote(percentLeft, percentTop, noteID);
@@ -199,15 +224,15 @@ $(document).unbind('keydown').bind('keydown', function (event) {
     var doPrevent = false;
     if (event.keyCode === 8) {
         var d = event.srcElement || event.target;
-        if ((d.tagName.toUpperCase() === 'INPUT' && 
+        if ((d.tagName.toUpperCase() === 'INPUT' &&
              (
                  d.type.toUpperCase() === 'TEXT' ||
-                 d.type.toUpperCase() === 'PASSWORD' || 
-                 d.type.toUpperCase() === 'FILE' || 
-                 d.type.toUpperCase() === 'EMAIL' || 
-                 d.type.toUpperCase() === 'SEARCH' || 
+                 d.type.toUpperCase() === 'PASSWORD' ||
+                 d.type.toUpperCase() === 'FILE' ||
+                 d.type.toUpperCase() === 'EMAIL' ||
+                 d.type.toUpperCase() === 'SEARCH' ||
                  d.type.toUpperCase() === 'DATE' )
-             ) || 
+             ) ||
              d.tagName.toUpperCase() === 'TEXTAREA') {
             doPrevent = d.readOnly || d.disabled;
         }

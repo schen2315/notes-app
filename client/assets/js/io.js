@@ -44,7 +44,7 @@
         id = note.attr("id"),
         position = note.data("draggabilly").position,
         text = $(this).val();
-        
+
     var object = {
           id: id,
           position: { left : (position.x/ canvasWidth),
@@ -57,19 +57,19 @@
 
   //this is what the other clients will see
   function keyupResponse(data) {
-    
+
       //make sure to disable textarea when someone else is typing
       var id = data.id,
           text = data.text;
-          
+
       console.log('i got the data!')
-      //make sure to disable textarea when someone else is typing    
+      //make sure to disable textarea when someone else is typing
       $('#' + data.id.toString())
                   .children("textarea")
                   //.attr("disabled", "")
                   .val(text);
-                  
-      
+
+
   }
 
 
@@ -107,7 +107,7 @@
     var note = $(this);
 
     //make sure you can see the clicked note
-    note.css('z-index', '2').siblings().css('z-index', '0').siblings('#context-menu').css('z-index','1000').siblings('#dark-screen').css('z-index','1');
+    note.css('z-index', '2').siblings().css('z-index', '0').siblings('#context-menu').css('z-index','1000').siblings('#dark-screen').css('z-index','1').siblings('#color-picker').css('z-index','1000');
 
     //determine if context-menu should be displayed on the left or on the right
     if (note.position().left+note.width()+contextMenu.width()>=$('#canvas').width()){
@@ -218,7 +218,7 @@
     callback();
   }
   function updateCallback() {
-    
+
     //on update, everybody waits one second
     setTimeout(function() {
       Avgrund.hide();

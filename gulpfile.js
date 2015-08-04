@@ -65,7 +65,9 @@ var paths = {
   
   jquery : 'client/assets/js/jquery-2.1.4.min.js',
   
-  'jquery-ui' : 'client/assets/js/jquery-ui.min.js'
+  'jquery-ui' : 'client/assets/js/jquery-ui.min.js',
+  
+  'jquery.mobile' : 'client/assets/js/jquery.mobile-events.min.js'
 }
 
 // 3. TASKS
@@ -140,8 +142,21 @@ gulp.task('css', function() {
 });
 
 // Compiles and copies the Foundation for Apps JavaScript, as well as your app's custom JS
-gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io', 'uglify:notes', 'uglify:jquery', 'uglify:jquery-ui']);
+gulp.task('uglify', ['uglify:foundation', 'uglify:app', 'uglify:socket', 'uglify:io', 'uglify:notes', 'uglify:jquery', 'uglify:jquery-ui', 'uglify:jquery.mobile']);
 
+
+gulp.task('uglify:jquery.mobile', function(cb) {
+  var uglify = $.if(isProduction, $.uglify()
+    .on('error', function (e) {
+      console.log(e);
+    }));
+
+  return gulp.src(paths['jquery.mobile'])
+    .pipe(uglify)
+    .pipe($.concat('jquery-mobile.js'))
+    .pipe(gulp.dest('./build/assets/js/'))
+  ;
+});
 gulp.task('uglify:jquery', function(cb) {
   var uglify = $.if(isProduction, $.uglify()
     .on('error', function (e) {

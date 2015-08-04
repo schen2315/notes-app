@@ -65,6 +65,14 @@ $(document).ready( function(){
   //     }
   // });
 
+  //doubletap canvas to initialize a new note
+   $("#canvas").bind('doubletap', function(e, touch) {
+    var pos = {};
+    console.log(touch)
+        pos.pageY = touch.firstTap.offset.y;
+        pos.pageX = touch.firstTap.offset.x;
+    initializeNote(pos);
+   });
   //change color of note
   $("#customize").click(function(){
     //open color-picker and set position of color-picker
@@ -141,7 +149,9 @@ $(document).ready( function(){
     }
   });
 
-  // $("#canvas").dblclick(initializeNote);
+  // $("#canvas").dblclick(function(e) {
+  //     initializeNote(e)
+  // });
 
   function initializeNote(e) {
 

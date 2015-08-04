@@ -47,13 +47,13 @@ $(document).ready( function(){
   //CALL queryLength , DO NOT DO noteID++
   queryLength();
   username();
-
+  
   $("#Okay").click(function() {
     username = $('#username').children('form').children('input').val();
     socket.emit('user', username);
     console.log( $('#username').children('form').children('input').val());
     Avgrund.hide();
-  })
+  });
   // $(document).mouseup(function (e){
   //     // if the target of the click isn't the context-menu nor a descendant of the context-menu
   //     if (!contextMenu.is(e.target) && contextMenu.has(e.target).length === 0 && contextMenu.is(':visible')){
@@ -94,11 +94,9 @@ $(document).ready( function(){
     $("#removeAll").data("cancel",true);
     $("#addNote").hide();
     $('#dark-screen').css('z-index','3').fadeIn(250);
-
-    $("#canvas").prepend("<h2 id='add-to-canvas'>Add your note to the blank space. </h2>");
-
-    //here we will emit the add event
-    $("#canvas").on("click", initializeNote);
+      $("#canvas").prepend("<h2 id='add-to-canvas'>Add your note to the blank space. </h2>");
+      //here we will emit the add event
+      $("#canvas").on("click", initializeNote);
   });
 
   $("#removeAll").click(function(){
@@ -135,61 +133,42 @@ $(document).ready( function(){
     console.log(percentTop);
     console.log(percentLeft);
     newTop = newTop - menuHeight;
-    $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
-
-    /*$("#canvas").append("<div class='note' id='" + noteID + "'></div>")
-                .child("#" + noteID)
-                .css({
-                        'top' : newTop + "px",
-                        'left' : newLeft + "px"
-                      });*/
-
-                /*      $("<div></div>").appendTo("#canvas")
-                                       .attr('id', noteID)
-                                       .addClass('note')
-                                       .css({
-                                               'top' : newTop + "px",
-                                               'left' : newLeft + "px"
-                                             })
-                                       .append("<div class='handle'><form><div class='row'><div><label><div class='noteTitle'>Sticky Note</div> <textarea placeholder='type here'></textarea></label></div></div></form></div>")
-                                       ;
-  /*  $("<form><div class='row'><div class='large-12 columns'><label><div class='noteTitle'>Sticky Note</div> <textarea placeholder='type here'></textarea></label></div></div></form>")
-          .appendTo('#' + noteID)
-          .child('textarea')
-          .on('click', function() {
-            event.stopPropogation();
-          });
-  */
-
-  $("#" + noteID).draggabilly({
-                            containment: "#canvas",
-                            handle: '.handle'
-                          })   //these are the event listeners that make the socket.io work
-                 .on('dragMove', drag)
-                 .on('staticClick', staticClick)
-                 .on('dragStart', function dragStart() {
-                     //hide context-menu while moving
-                     contextMenu.hide();
-                     //lose selected note
-                     contextMenu.data('selectedNote',-1);
-                   })
-                 .children('textarea')
-                 .on('keypress', keyup)
-                 .on('keyup', keyup);
+      
+      $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
 
 
-    $("#canvas").off("click");
-    $("#add-to-canvas").remove();
-    $("#addNote").show();
-    $("#removeAll").data("cancel", false);
-    $("dark-screen").fadeOut(250);
-    //emit addNote event
-    console.log(percentLeft, percentTop, noteID);
-    addNote(percentLeft, percentTop, noteID);
+      //initialize draggabilly so that it reacts on all screens
+      $("#" + noteID).draggabilly({
+                                containment: "#canvas",
+                                handle: '.handle'
+                              })   //these are the event listeners that make the socket.io work
+                     .on('dragMove', drag)
+                     .on('staticClick', staticClick)
+                     .on('dragStart', function dragStart() {
+                         //hide context-menu while moving
+                         contextMenu.hide();
+                         //lose selected note
+                         contextMenu.data('selectedNote',-1);
+                       })
+                     .children('textarea')
+                     .on('keypress', keyup)
+                     .on('keyup', keyup);
 
-    console.log(noteID);
 
-    queryLength();
+        $("#canvas").off("click");
+        $("#add-to-canvas").remove();
+        $("#addNote").show();
+        $("#removeAll").data("cancel", false);
+        $("#dark-screen").fadeOut(250);
+        //emit addNote event
+        console.log(percentLeft, percentTop, noteID);
+        addNote(percentLeft, percentTop, noteID);
+
+        console.log(noteID);
+
+        queryLength();
+     
+    
   }
 });
 

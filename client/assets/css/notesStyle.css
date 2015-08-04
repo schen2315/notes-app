@@ -75,3 +75,12 @@
   background-position: center center;
   background-size: auto 75%;
 }
+
+/*Rectangle*/
+
+#rectangle {
+  width:auto;
+  height:80px;
+  background-color: white;
+  margin: 8px;
+}

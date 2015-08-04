@@ -4,7 +4,7 @@
 //to change these variables as the screen is resized.
 var canvasWidth = document.documentElement.clientWidth,
     canvasHeight = document.documentElement.clientWidth * 0.52734;
-var menuHeight = document.getElementById('menu').offsetHeight;
+//var menuHeight = document.getElementById("menu").offsetHeight;
 var contextMenu = $("#context-menu");
 var colorPicker = $('#color-picker');
 var selectedNote;
@@ -123,13 +123,25 @@ $(document).ready( function(){
     });
   });
 
-  $("#addNote, .add").click(function(){
+  $(".addNote, .add").click(function(){
     $("#removeAll").data("cancel",true);
-    $("#addNote").hide();
+    $(".addNote").hide();
     $('#dark-screen').css('z-index','3').fadeIn(250);
       $("#canvas").prepend("<h2 id='add-to-canvas'>Add your note to the blank space. </h2>");
       //here we will emit the add event
-      $("#canvas").on("click", initializeNote);
+      
+      //get coordinates
+      
+      var parentOffset = $(this).parent().offset();
+      var e = {};
+      e.pageX = 
+      $("#canvas").on("click",function(e) {
+        
+          var parentOffset = $(this).parent().offset();
+          e.pageX = e.pageX - parentOffset.left;
+          e.pageY = e.pageY - parentOffset.top;
+          initializeNote(e);
+      });
   });
 
   $("#removeAll").click(function(){
@@ -144,7 +156,7 @@ $(document).ready( function(){
       $("#canvas").off("click");
       $("#add-to-canvas").remove();
       $('#dark-screen').fadeOut(250);
-      $("#addNote").show();
+      $(".addNote").show();
       $("#removeAll").data("cancel",false);
     }
   });
@@ -155,6 +167,8 @@ $(document).ready( function(){
 
   function initializeNote(e) {
 
+    
+    
     //get position of the mouse
     var newTop = e.pageY,
         newLeft = e.pageX;
@@ -162,12 +176,12 @@ $(document).ready( function(){
 
     console.log(newTop + ',' + newLeft);
 
-    var percentTop = ((newTop - menuHeight) / canvasHeight),
+    var percentTop = ((newTop /*- menuHeight*/) / canvasHeight),
         percentLeft = (newLeft / canvasWidth);
 
     console.log(percentTop);
     console.log(percentLeft);
-    newTop = newTop - menuHeight;
+    // newTop = newTop - menuHeight;
 
       
       $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");
@@ -193,7 +207,7 @@ $(document).ready( function(){
 
         $("#canvas").off("click");
         $("#add-to-canvas").remove();
-        $("#addNote").show();
+        $(".addNote").show();
         $("#removeAll").data("cancel", false);
         $("#dark-screen").fadeOut(250);
         //emit addNote event

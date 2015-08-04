@@ -50,6 +50,15 @@ var paths = {
   //These are the socket.io clientside file 
   socketIoJS : 'client/assets/js/socket.io.js',
   
+  //Here are the images
+  img : [
+      'client/assets/img/bin2.svg',
+      'client/assets/img/Capco_logo.jpg',
+      'client/assets/img/menu.svg',
+      'client/assets/img/plus.svg',
+      'client/assets/img/share.svg'
+  ],
+  
   //Where all the magic happens
   ioJS : 'client/assets/js/io.js',
   
@@ -115,7 +124,12 @@ gulp.task('copy:foundation', function(cb) {
   gulp.src('./bower_components/foundation-apps/iconic/**/*')
     .pipe(gulp.dest('./build/assets/img/iconic/'))
   ;
-
+  
+  //Allen's pictures
+  gulp.src(paths.img)
+    .pipe(gulp.dest('./build/assets/img/'))
+  ;
+  
   cb();
 });
 

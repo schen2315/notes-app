@@ -68,3 +68,10 @@
   position: absolute;
   z-index: 1;
 }
+
+#bgimg {
+  background-image: url(/assets/img/Capco_logo.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: auto 75%;
+}

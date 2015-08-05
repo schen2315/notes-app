@@ -236,6 +236,35 @@
   </head>
     <body>
 
+        <zf-offcanvas position="left" id="bar" class="show-for-large">
+          <div class="grid-content collapse">
+            <div class="menu-group dark">
+              <div class="left-menu-group">
+                <ul class="menu-bar dark">
+                  <li><a onclick="prependtext()"><img src="assets/img/file-empty.svg" id="space"></a></li>
+                </ul>
+              </div>
+              <div class="right-menu-group">
+                <ul class="menu-bar dark">
+                  <li><a><img src="assets/img/floppy-disk.svg" id="space"></a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="grid-content" style="background-color: #EAEAE8;">
+                <!-- Search Bar -->
+            <form>
+              <label>
+                <span class="inline-label">
+                  <a href="#" class="button" style="background-color: #EAEAE8;" ><img src="assets/img/search.svg"></a>
+                  <input type="search" placeholder="Search List" style="background-color: #EAEAE8; border-color: #EAEAE8">
+                </span>
+              </label>
+            </form>
+          </div>
+          <div class="grid-content collapse" style="padding: 16px;" id="test"></div>
+        </zf-offcanvas>
+  
 
         <div class="grid-frame vertical">
           
@@ -243,12 +272,12 @@
             <div class="menu-group">
               <div class="menu-group-left">
                 <ul class="menu-bar">
-                  <li><a zf-toggle="menu"><img src="assets/img/menu.svg" style="margin: 0px;"></a></li>
+                  <li><a zf-toggle="bar"><img src="assets/img/menu.svg" id="space"></a></li>
                   <!-- ^^^Can put "show-for-large-only here but its annoying when its in wip" -->
-                  <li><a class="addNote"><img src="assets/img/plus.svg" style="margin: 0px;"></a></li>
+                  <li><a class="addNote"><img src="assets/img/plus.svg" id="space"></a></li>
                   <!-- Random plus sign -->
                   <li>
-                    <a href="#" onclick="javascript:openDialog();" zf-close="menu"><img src="assets/img/share.svg" style="margin: 0px;"></a>
+                    <a href="#" onclick="javascript:openDialog();" zf-close="bar"><img src="assets/img/share.svg" id="space"></a>
                     <!-- Shares -->
                   </li>
                 </ul>
@@ -256,7 +285,7 @@
               <div class="menu-group-right">
                 <ul class="menu-bar right">
                   <li>
-                    <a href="#" onclick="javascript:openSecondDialog();" zf-close="menu"><img src="assets/img/bin2.svg" style="margin: 0px;"></a>
+                    <a href="#" onclick="javascript:openSecondDialog();" zf-close="bar"><img src="assets/img/bin2.svg" id="space"></a>
                     <!-- Deletes -->
                   </li>
                 </ul>
@@ -269,14 +298,14 @@
           <div class="grid-content shrink collapse show-for-small-only" >
             <div class="menu-bar shrink collapse">
               <ul class="menu-bar">
-                <li><a class="addNote"><img src="assets/img/plus.svg" style="margin: 0px;"></a></li>
+                <li><a class="addNote"><img src="assets/img/plus.svg" id="space"></a></li>
                 <!-- Random plus sign -->
                 <li>
-                  <a href="#" onclick="javascript:openDialog();" zf-close="menu"><img src="assets/img/share.svg" style="margin: 0px;"></a>
+                  <a href="#" onclick="javascript:openDialog();" zf-close="bar"><img src="assets/img/share.svg" id="space"></a>
                   <!-- Shares -->
                 </li>
                 <li>
-                  <a href="#" onclick="javascript:openSecondDialog();" zf-close="menu"><img src="assets/img/bin2.svg" style="margin: 0px;"></a>
+                  <a href="#" onclick="javascript:openSecondDialog();" zf-close="bar"><img src="assets/img/bin2.svg" id="space"></a>
                   <!-- Deletes -->
                 </li>
               </ul>
@@ -288,10 +317,10 @@
             <div class="menu-group">
               <div class="menu-group-left">
                 <ul class="menu-bar">
-                  <li><a class="addNote"><img src="assets/img/plus.svg" style="margin: 0px;"></a></li>
+                  <li><a class="addNote"><img src="assets/img/plus.svg" id="space"></a></li>
                   <!-- Random plus sign -->
                   <li>
-                    <a href="#" onclick="javascript:openDialog();" zf-close="menu"><img src="assets/img/share.svg" style="margin: 0px;"></a>
+                    <a href="#" onclick="javascript:openDialog();" zf-close="bar"><img src="assets/img/share.svg" id="space"></a>
                     <!-- Shares -->
                   </li>
                 </ul>
@@ -299,7 +328,7 @@
               <div class="menu-group-right condense">
                 <ul class="menu-bar right">
                   <li>
-                    <a href="#" onclick="javascript:openSecondDialog();" zf-close="menu"><img src="assets/img/bin2.svg" style="margin: 0px;"></a>
+                    <a href="#" onclick="javascript:openSecondDialog();" zf-close="bar"><img src="assets/img/bin2.svg" id="space"></a>
                     <!-- Deletes -->
                   </li>
                 </ul>

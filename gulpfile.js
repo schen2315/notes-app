@@ -56,7 +56,10 @@ var paths = {
       'client/assets/img/Capco_logo.jpg',
       'client/assets/img/menu.svg',
       'client/assets/img/plus.svg',
-      'client/assets/img/share.svg'
+      'client/assets/img/share.svg',
+      'client/assets/im/file-empty.svg',
+      'client/assets/im/floppy-disk.svg',
+      'client/assets/im/search.svg',
   ],
   
   //Where all the magic happens

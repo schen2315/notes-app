@@ -3,7 +3,12 @@
 }
 @media screen and (min-width:4000px) {
   .note textarea {
-    font-size: 40px;
+    font-size: 60px;
+  }
+}
+@media screen and (min-width:3000px) {
+  .note textarea {
+    font-size: 45px;
   }
 }
 @media screen and (max-width:1700px) {

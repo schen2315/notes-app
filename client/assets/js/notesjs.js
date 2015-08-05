@@ -3,9 +3,10 @@
 //LATER IMPLEMENT JQUERY on resize event listener
 //to change these variables as the screen is resized.
 var canvasWidth = document.documentElement.clientWidth,
-    canvasHeight = document.documentElement.clientWidth * 0.41666;
+    canvasHeight = document.documentElement.clientWidth * 0.3;
 console.log(document.documentElement.clientWidth, document.documentElement.clientHeight);
-var menuHeight = document.getElementById("menu").offsetHeight;
+var menuHeight = $("#menu").height(); //remember, this only works for large
+                                      //make it work on all sizes LATER
 console.log(menuHeight);
 var contextMenu = $("#context-menu");
 var colorPicker = $('#color-picker');
@@ -88,7 +89,7 @@ $(document).ready( function(){
    $("#canvas").bind('doubletap', function(e, touch) {
     var pos = {};
     console.log(touch)
-        pos.pageY = (touch.firstTap.offset.y - menuHeight);
+        pos.pageY = (touch.firstTap.offset.y /*+ menuHeight*/);
         console.log(pos)
         console.log(menuHeight);
         pos.pageX = touch.firstTap.offset.x;
@@ -197,13 +198,13 @@ $(document).ready( function(){
 
     console.log(newTop + ',' + newLeft);
 
-    var percentTop = ((newTop - menuHeight) / canvasHeight) ,
+    var percentTop = ((newTop /*- menuHeight*/) / canvasHeight) ,
         percentLeft = (newLeft / canvasWidth);
 
     console.log(percentTop);
     console.log(percentLeft);
 
-     newTop = newTop - menuHeight;
+     newTop = newTop /*- menuHeight*/;
 
       
       $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");

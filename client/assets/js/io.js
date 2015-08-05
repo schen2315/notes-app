@@ -104,6 +104,7 @@
     //later create the ability to append an array of notes
     //so that we can refer to that note
 
+    event.stopPropagation();
     var note = $(this);
 
     //make sure you can see the clicked note

@@ -39,6 +39,7 @@ response.connection = function(socket) {
     // so which owner, then which note, and its position relative to screen size
     //session.publicTab[data.id]['position'] = data.position;
     session.publicTab[data.id] = data;
+    console.log(session.publicTab[data.id]);
     socket.broadcast.emit('drag', data);
   });
   
@@ -63,6 +64,9 @@ response.connection = function(socket) {
     socket.emit('queryLength', session.publicTab.length);
   })
   
+  socket.on('window', function() {
+    socket.emit('window', session.publicTab);
+  })
 }
 
 

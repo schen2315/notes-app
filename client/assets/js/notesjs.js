@@ -3,13 +3,31 @@
 //LATER IMPLEMENT JQUERY on resize event listener
 //to change these variables as the screen is resized.
 var canvasWidth = document.documentElement.clientWidth,
-    canvasHeight = document.documentElement.clientWidth * 0.52734;
-//var menuHeight = document.getElementById("menu").offsetHeight;
+    canvasHeight = document.documentElement.clientWidth * 0.41666;
+console.log(document.documentElement.clientWidth, document.documentElement.clientHeight);
+var menuHeight = document.getElementById("menu").offsetHeight;
+console.log(menuHeight);
 var contextMenu = $("#context-menu");
 var colorPicker = $('#color-picker');
 var selectedNote;
 var noteID;
 var socket = io();
+function calibrate() {
+  canvasWidth = document.documentElement.clientWidth;
+  canvasHeight = document.documentElement.clientWidth * 0.41666;
+  console.log(canvasWidth, canvasHeight);
+  socket.emit('window', {});
+}
+var resize = _.debounce(calibrate, 100);
+
+socket.on('window', function(data) {
+  console.log(data);
+  
+  for( var i=0; i < noteID; i++) {
+    $("#" + i).css({'top': ((data[i].CoordY || data[i].position.top) * canvasHeight), 'left': (data[i].CoordX || data[i].position.left) * canvasWidth})
+    //console.log(data[i].CoordY * canvasHeight);
+  }
+})
 //get the # of notes from the backend
 function queryLength() {
   socket.emit('queryLength', {});
@@ -37,6 +55,7 @@ $(document).mouseup(function (e){
     }
 });
 
+$(window).on('resize', resize);
 
 $(document).ready( function(){
 
@@ -69,7 +88,9 @@ $(document).ready( function(){
    $("#canvas").bind('doubletap', function(e, touch) {
     var pos = {};
     console.log(touch)
-        pos.pageY = touch.firstTap.offset.y;
+        pos.pageY = (touch.firstTap.offset.y - menuHeight);
+        console.log(pos)
+        console.log(menuHeight);
         pos.pageX = touch.firstTap.offset.x;
     initializeNote(pos);
    });
@@ -176,12 +197,13 @@ $(document).ready( function(){
 
     console.log(newTop + ',' + newLeft);
 
-    var percentTop = ((newTop /*- menuHeight*/) / canvasHeight),
+    var percentTop = ((newTop - menuHeight) / canvasHeight) ,
         percentLeft = (newLeft / canvasWidth);
 
     console.log(percentTop);
     console.log(percentLeft);
-    // newTop = newTop - menuHeight;
+
+     newTop = newTop - menuHeight;
 
       
       $('#canvas').append("<div class='note' id='"+ noteID +"' style = 'top:" + newTop + "px; left:" + newLeft + "px'><div class='handle'></div><textarea class='noteTextArea' placeholder='type here'></textarea></div>");

@@ -1,8 +1,33 @@
 .note > * {
       position: relative;
 }
+@media screen and (min-width:4000px) {
+  .note textarea {
+    font-size: 40px;
+  }
+}
+@media screen and (max-width:1700px) {
+  .note textarea {
+    font-size: 23px;
+  }
+}
+@media screen and (max-width:1300px) {
+  .note textarea {
+    font-size: 19px;
+  }
+}
+@media screen and (max-width:800px) {
+  .note textarea {
+    font-size: 13px;
+  }
+}
+@media screen and (max-width:650px) {
+  .note textarea {
+    font-size: 10px;
+  }
+}
 .note {
-      width: 10vw;
+      width: 16.18vw;
       height:10vw;
       background:#FFFF99;
       position: absolute;
@@ -22,7 +47,6 @@
   resize: none;
   width: 100%;
   height: 75%;
-  font-size: 1em;
 }
 
 .note::-webkit-scrollbar{width:0;}

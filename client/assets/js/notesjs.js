@@ -5,8 +5,16 @@
 var canvasWidth = document.documentElement.clientWidth,
     canvasHeight = document.documentElement.clientWidth * 0.3;
 console.log(document.documentElement.clientWidth, document.documentElement.clientHeight);
-var menuHeight = $("#menu").height(); //remember, this only works for large
-                                      //make it work on all sizes LATER
+var menuHeight;
+
+ if ($("#menu1").height() !== 0) {
+   menuHeight = $("#menu1").height();
+ } else if($("#menu2").height() !== 0) {
+   menuHeight = $("#menu2").height();
+ } else if($("#menu3").height() !== 0) {
+   menuHeight = $("#menu3").height();
+ }//remember, this only works for large
+  //make it work on all sizes LATER
 console.log(menuHeight);
 var contextMenu = $("#context-menu");
 var colorPicker = $('#color-picker');
@@ -106,7 +114,14 @@ $(document).ready( function(){
     contextMenu.data('selectedNote',-1);
     //click color
     $("#color-picker div").click(function(){
-      selectedNote.css('background',$(this).attr('id'));
+      var color = $(this).attr('id'),
+          id = selectedNote.attr("id");
+      selectedNote.css('background', color);
+      //need to emit the color chosen
+      socket.emit('color', {
+          id : id,
+          color: color
+      });
     });
     //embrace the darkness
     $('#dark-screen').fadeIn(250);
@@ -117,20 +132,45 @@ $(document).ready( function(){
       selectedNote.children('.handle').css('width','100%').css('height','100%');
     });
   });
-
+  
   //delete specific note
   $("#delete").click(function(){
     $("#"+contextMenu.data("selectedNote")).fadeOut(250,function(){
       $(this).remove();
+      socket.emit("delete", {
+          id : $(this).attr('id')
+      })
     });
     contextMenu.hide();
+    //WTF does this mean???
     contextMenu.data('selectedNote',-1);
   });
 
+  
   //enable resizing
   $("#resize").click(function(){
     selectedNote = $("#"+contextMenu.data("selectedNote"));
     selectedNote.css('resize','both');
+    
+    
+    //add an on mousemove listener,
+    //query the height and width of the note
+    //emit it to the backend
+    var resize = true;
+    function size() {
+      if(resize === true) {
+        socket.emit('size', {
+          id : selectedNote.attr('id'),
+          size: { 
+                  //convert to vw
+                  height : (selectedNote.height() * 100) / canvasWidth,
+                  width : (selectedNote.width() * 100) / canvasWidth 
+                }
+        });
+      }
+    }
+    var _size = _.debounce(size, 100);
+    selectedNote.on('mousemove', _size);
     //disable dragging the note
     selectedNote.children('.handle').css('width','0%').css('height','0%');
     contextMenu.hide();
@@ -142,6 +182,7 @@ $(document).ready( function(){
       $(this).fadeOut(250);
       selectedNote.css('resize','none');
       selectedNote.children('.handle').css('width','100%').css('height','100%');
+      resize = false;
     });
   });
 
@@ -171,7 +212,7 @@ $(document).ready( function(){
       $(".note").fadeOut(250, function(){
         $(this).remove;
       })
-        noteID = 0;
+      socket.emit('removeAll', {});
 
       //^^fix this later, it won't work anymore.
     } else {

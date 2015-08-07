@@ -183,6 +183,40 @@
     queryLength();
   }
 
+  socket.on('color', colorResponse);
+  
+  function colorResponse(data) {
+    console.log(data.id);
+    if(data.color) {
+      $('#' + data.id.toString()).css('background', data.color.toString());
+    }
+  }
+  
+  socket.on('delete', deleteResponse);
+  
+  function deleteResponse(data) {
+    $("#" + data.id.toString()).remove();
+  }
+  
+  socket.on('size', sizeResponse);
+  
+  function sizeResponse(data) {
+    if(data.size) {
+      $("#" + data.id.toString()).css({
+                                        //convert back to pixel
+                                        height: (data.size.height * canvasWidth) / 100,
+                                        width: (data.size.width * canvasWidth) / 100
+                                      })
+    }
+  }
+  
+  socket.on('removeAll', removeAllResponse);
+  function removeAllResponse() {
+    console.log('removed all');
+    $(".note").fadeOut(250, function(){
+      $(this).remove;
+    });
+  }
   socket.on('user', userResponse);
 
   function userResponse(data) {
@@ -210,9 +244,14 @@
     //noteID = 0;
 
     for(var i = 0; i < noteID; i++ ) {
-        console.log('hey');
-        addNoteResponse(publicTab[i]);
-        keyupResponse(publicTab[i]);
+        if(!(publicTab[i]['deleted'] == true)) {
+          console.log('hey');
+          console.log(publicTab[i])
+          addNoteResponse(publicTab[i]);
+          keyupResponse(publicTab[i]);
+          sizeResponse(publicTab[i]);
+          colorResponse(publicTab[i]);
+        }
     }
 
     //fix callback later so that the update avgrund dialog only closes when eveyone is finished loading.

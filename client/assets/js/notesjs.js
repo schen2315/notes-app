@@ -3,7 +3,7 @@
 //LATER IMPLEMENT JQUERY on resize event listener
 //to change these variables as the screen is resized.
 var canvasWidth = document.documentElement.clientWidth,
-    canvasHeight = document.documentElement.clientWidth * 0.3;
+    canvasHeight = document.documentElement.clientWidth * 0.38;
 console.log(document.documentElement.clientWidth, document.documentElement.clientHeight);
 var menuHeight;
 
